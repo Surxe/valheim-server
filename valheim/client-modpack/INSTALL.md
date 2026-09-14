@@ -41,15 +41,8 @@ playing on BaldurianQuat. It's **client-side and personal**: it changes nothing 
 for other players, and it does **not** grant free unlocks (you still have to actually do the thing;
 spawned/cheated items are still flagged as cheated by the game as normal).
 
-After installing, open its config (`BepInEx/config/Azumatt.Unshamed.cfg`, generated on first
-launch — or edit it in r2modman's config editor) and set:
-
-```
-Enable Retroactive = true
-```
-
-That grants the achievements you'd **already earned** (once, on the next load). Leave it off and
-you'll only start banking achievements from that point forward. Steam only — Xbox/Game Pass use a
+Setup and config (including the retroactive-unlock option) are on the mod's Thunderstore page:
+<https://thunderstore.io/c/valheim/p/Azumatt/Unshamed/>. Steam only — Xbox/Game Pass use a
 separate achievement system this doesn't affect.
 
 ---
