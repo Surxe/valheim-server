@@ -46,7 +46,8 @@
 #   VALHEIM_VMID (default 100)   VALHEIM_CONTAINER (default valheim)   [optional overrides]
 #   VALHEIM_STATUS_STATE_FILE (default /var/lib/home-server/valheim-status.state)
 #   HOST_HEALTH_STATE_FILE    (default /var/lib/home-server/host-health.state)
-#   HS_HEALTH                 (default <repo>/host/hs-health.sh)
+#   HS_HEALTH                 (default: the sibling home-server repo's host/hs-health.sh;
+#                              host-health embeds are skipped cleanly if it's absent)
 #
 # Exit codes: 0 = ok (posted, skipped-no-change, initialized baseline, or webhook
 #             unconfigured -> logged and skipped);   1 = a webhook POST itself failed.
@@ -58,7 +59,9 @@ set -euo pipefail
 : "${HOST_HEALTH_STATE_FILE:=/var/lib/home-server/host-health.state}"
 
 HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
-: "${HS_HEALTH:=$HERE/../host/hs-health.sh}"
+# hs-health.sh lives in the sibling home-server (host) repo, not this one. Default to it by
+# relative sibling path; override with HS_HEALTH. Missing = host-health embeds skipped cleanly.
+: "${HS_HEALTH:=$HERE/../../home-server/host/hs-health.sh}"
 
 MODE=heartbeat
 case "${1:-}" in
