@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily installed-mod-list post to Discord
+
+[Timer]
+# Once a day. Offset from the mod-update checks (09:00 / 09:05).
+OnCalendar=*-*-* 09:10
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

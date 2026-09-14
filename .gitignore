@@ -1,0 +1,16 @@
+# Real secret env files are NEVER committed (templates *.env.example are kept).
+*.env
+!*.env.example
+backup.env
+valheim.env
+# Transient mod download cache (DLLs themselves are tracked in valheim/dll/).
+valheim/mod-cache/
+# Generated runtime log from check-mod-updates.sh (data, not source).
+valheim/mod-update-history.csv
+# OS / editor junk
+*.swp
+*~
+.DS_Store
+# Python bytecode
+__pycache__/
+*.pyc

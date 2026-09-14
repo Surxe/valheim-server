@@ -1,0 +1,14 @@
+[Unit]
+Description=home-server: Valheim mod-update check + email alert on change
+Documentation=file:///srv/dev/repos/valheim-server/valheim/notify-mod-updates.sh
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Secret (SMTP app password + from/to) lives outside the repo. Leading '-' makes it
+# optional so the timer doesn't hard-fail before the key is staged; the script then
+# logs "SMTP not configured" instead of emailing.
+EnvironmentFile=-/etc/home-server/mod-notify.env
+ExecStart=/srv/dev/repos/valheim-server/valheim/notify-mod-updates.sh
+Nice=10

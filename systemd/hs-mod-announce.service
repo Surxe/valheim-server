@@ -1,0 +1,17 @@
+[Unit]
+Description=home-server: announce a Valheim mod-set change (diff, req/opt) to Discord
+Documentation=file:///srv/dev/repos/valheim-server/valheim/announce-mod-change.sh
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# AGENT-TRIGGERED, no timer: run this only AFTER a mod change is applied and verified
+# working (see the announce-valheim-mods skill). It posts the diff since the last
+# announcement, then saves the new baseline.
+# Posts to the #valheim-server-status channel (same webhook as the other Valheim feeds).
+# Leading '-' makes the env optional so `systemctl start` doesn't hard-fail before the
+# webhook is staged; the script then logs "would have posted" and exits 0 without saving.
+EnvironmentFile=-/etc/home-server/discord-server-status.env
+ExecStart=/srv/dev/repos/valheim-server/valheim/announce-mod-change.sh --post
+Nice=10

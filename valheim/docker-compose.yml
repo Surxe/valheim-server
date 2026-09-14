@@ -1,0 +1,36 @@
+# Valheim modded dedicated server (lloesche/valheim-server).
+# Runs inside the Valheim VM. World + config are bind-mounted OUT of the container
+# so rebuilding/upgrading the container never touches the world (see docs/02).
+# Values come from valheim.env (placeholders until Ethan sets the real ones).
+services:
+  valheim:
+    image: lloesche/valheim-server:latest
+    container_name: valheim
+    restart: unless-stopped
+    stop_grace_period: 2m               # let the server flush the world on stop
+    cap_add:
+      - SYS_NICE
+    volumes:
+      - /srv/valheim/config:/config      # worlds, server config, BepInEx (PRECIOUS)
+      - /srv/valheim/data:/opt/valheim   # game/server install cache (throwaway)
+    env_file:
+      - /etc/valheim/valheim.env
+    environment:
+      # BepInEx on; mods are staged into /config/bepinex/plugins by stage-mods.sh.
+      BEPINEX: "true"
+      # Re-sync staged mods into the runtime tree before every server (re)start.
+      # The image only syncs plugins on container bootstrap, so a game/BepInEx
+      # auto-update (which restarts the server in place) otherwise relaunches with
+      # 0 mods. This hook (see hooks/sync-plugins.sh, staged to /config/hooks/)
+      # runs on that restart too. Observed + fixed after the 1.0 update 2026-09-09.
+      PRE_SERVER_RUN_HOOK: "/config/hooks/sync-plugins.sh"
+      SERVER_PUBLIC: "0"                 # hidden from public browser; crossplay code still works
+      # -crossplay is MANDATORY for the mod policy (docs/02). Steam login is anonymous
+      # (app 896660) so no account/purchase is needed to run the dedicated server.
+      SERVER_ARGS: "-crossplay"
+      STEAMCMD_ARGS: "validate"
+      TZ: "America/Chicago"
+    # Ports are NOT required for crossplay (outbound PlayFab relay); mapped only for
+    # optional same-LAN Steam joins. Safe to remove.
+    ports:
+      - "2456-2457:2456-2457/udp"

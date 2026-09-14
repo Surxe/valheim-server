@@ -1,0 +1,13 @@
+[Unit]
+Description=Valheim up/down edge check (every 3 min; posts to Discord only on change)
+
+[Timer]
+# Every 3 minutes. The check is cheap (qm status + one docker inspect) and posts nothing
+# unless the server just started or stopped, so this is quiet on Discord and light on the
+# guest agent. 3 min => a start/stop shows up within ~3 min of becoming reality.
+OnCalendar=*:0/3
+Persistent=false
+RandomizedDelaySec=20
+
+[Install]
+WantedBy=timers.target
