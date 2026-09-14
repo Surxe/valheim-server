@@ -93,13 +93,29 @@ if [ -d "$HERE/memory" ]; then
     if [ -f "${d}MEMORY.md" ]; then
       as_dev install -D -m 0644 "${d}MEMORY.md" "$dst/.index.d/$FRAGMENT_NAME"
     fi
-    as_dev bash -c '
-      set -euo pipefail
-      dst="$1"
-      if compgen -G "$dst/.index.d/*.md" >/dev/null; then
-        cat "$dst"/.index.d/*.md > "$dst/MEMORY.md"
-      fi
-    ' _ "$dst"
+    # Rebuild MEMORY.md from the fragments (name order), but PRESERVE any appended managed
+    # block at the tail — e.g. dev-env's shared-memories block, which dev-env/install.sh
+    # strips-and-reappends by markers. It starts at the first HTML-comment BEGIN marker
+    # (fragments never contain one). This keeps the rebuild non-destructive regardless of
+    # install order relative to dev-env (and for a standalone run of this installer).
+    as_dev python3 -c '
+import os, sys, glob
+dst = sys.argv[1]
+live = os.path.join(dst, "MEMORY.md")
+frags = sorted(glob.glob(os.path.join(dst, ".index.d", "*.md")))
+if frags:
+    tail = ""
+    if os.path.exists(live):
+        cur = open(live, encoding="utf-8").read()
+        i = cur.find("<!-- BEGIN")
+        if i != -1:
+            tail = cur[i:]
+    base = "".join(open(fp, encoding="utf-8").read() for fp in frags).rstrip("\n") + "\n"
+    out = base + ("\n" + tail.lstrip("\n") if tail else "")
+    if not out.endswith("\n"):
+        out += "\n"
+    open(live, "w", encoding="utf-8").write(out)
+' "$dst"
     say "memory ($name) -> $dst  (fragment $FRAGMENT_NAME)"
     ensure_agents_symlink "$dst" "$CLAUDE_DIR/projects/-$name/memory"
 
