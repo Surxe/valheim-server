@@ -1,0 +1,122 @@
+# mods.manifest — authoritative mod set for ModSentry policy enforcement.
+# Source of truth: valheim-mods/SERVER-HANDOFF.md (Ethan's handoff). Byte-exact DLLs
+# are in ./dll/, verified against these SHA-256 pins. If ./dll/<dll> is absent,
+# stage-mods.sh downloads the pinned Thunderstore zip and extracts+verifies the DLL.
+#
+# Format:  name | version | dll | sha256 | role | url
+#   role: plugin (loaded on server) / required / optional (ModSentry policy refs).
+#         combine with '+', e.g. plugin+required
+# BepInEx pack (denikson 5.4.2333) is installed by the lloesche image (BEPINEX=true).
+# Client and server DLLs must be byte-identical or ModSentry kicks the client.
+#
+# GOTCHA — Thunderstore / r2modman search is fuzzy and badly ranked: the mod you
+# want is often NOT the first hit (or even on the first page). Exact-name queries
+# still surface near-duplicates, forks, and unrelated packages above the real one,
+# so scroll a few results and confirm the author + package before trusting a URL.
+# Verify you grabbed the right one by matching the author/package in the url below
+# (e.g. NightOfGames/Huginn_Map, not some other "Huginn"), not just the mod name.
+#
+# ============================================================================
+# VALHEIM 1.0 (l-1.0.7, network v39, Unity 6) — mod status
+# ----------------------------------------------------------------------------
+# 1.0 broke the pre-1.0 mods (Jotunn 2.29.2 crashed on client connect via the
+# removed field ZRoutedRpc.Everybody; GlassPieces threw a client TypeLoadException).
+#
+# 2026-09-10: Jotunn shipped 2.30.0 and Drop That shipped 3.1.5 (both 1.0 builds),
+# so both are RE-ENABLED below.
+#
+# 2026-09-10 (later): re-tested the three still-disabled mods on their EXISTING
+# versions now that Jotunn 2.30.0 is a 1.0 build — none shipped a new version, but a
+# Jotunn-dependent mod could load on its current build if Jotunn was its only blocker.
+# Loaded all three server-side and read BepInEx LogOutput.log. Result:
+#   * FarmGrid 1.0.0    -> RE-ENABLED. Loads clean under Jotunn 2.30.0 (no TypeLoad /
+#       Harmony / dependency errors). Jotunn was its only blocker. Client-side/optional.
+#       (Server-side load verified from the headless server; its build-placement grid
+#        overlay is a client UI feature and was not exercised on a real client.)
+#   * Huginn Map 1.0.5  -> STAYS DISABLED. It now LOADS ("Huginn active"), but its own
+#       code calls game internals that 1.0 removed/renamed, so its headline features are
+#       broken: shared map data fails (Method not found Minimap.ReadExploredArray) and
+#       boat tracking fails (Field not found ZoneSystem.m_activeArea). Jotunn being fixed
+#       only un-blocked loading; Huginn itself needs a 1.0 rebuild.
+#   * GlassPieces 1.2.5 -> (was) STAYS DISABLED. Still throws TypeLoadException (VTable setup
+#       of GlassPieces.Functions.Collector/SliderSwitch) on 1.0. It depends ONLY on
+#       BepInEx, not Jotunn, so the Jotunn update never applied to it — needs a rebuild.
+#       >> 2026-09-13: RE-ENABLED at 1.2.7 — blacks7ar shipped the 1.0 rebuild (v1.2.6
+#          "updated for valheim 1.0 deepnorth", v1.2.7 recipe fix). See its active line below.
+#
+# 2026-09-12: DROPPED Favorite_Items (Valheazy) - abandoned (still 0.1.5, last release
+# 2026-02-23) and broken on 1.0 (TypeLoadException: missing inventory-UI type 'Element').
+# Replaced by ronaldoniz/FavoriteItems (a different, actively-maintained 1.0 mod) - see below.
+#
+# Re-enable Huginn — un-comment, bump version+SHA, re-stage, update the client docs, restart —
+# once it ships a real 1.0 build. Track with ./check-mod-updates.sh. (GlassPieces done 2026-09-13.)
+# Disabled DLLs are preserved on the VM under /srv/valheim/config/_disabled_mods_20260909/.
+#
+# WARNING: do NOT leave DropThat's WriteDropTablesToFiles (drop_that.cfg [Debug]) enabled.
+# On 1.0 it pegs all game threads on world start and (on the old 3-core VM) starved the
+# guest agent, requiring a hard reset. Enable it briefly to dump prefab ids, grab the
+# files from BepInEx/Debug/, then set it back to false. (Jotunn 2.30.0 itself is fine.)
+# ============================================================================
+# ModSentry (Landoria): validates required/optional client mods. Bumped 1.0.17 -> 1.0.18 on
+# 2026-09-12 ("Migration to Valheim 1.0.x"); bumped 1.0.18 -> 1.0.19 on 2026-09-13 (auto-creates
+# the ModSentry_Required/ModSentry_Optional folders at startup). Deps: BepInEx only.
+ModSentry|1.0.19|Landoria.ModSentry.dll|e192482202f447d6ff81b13965f1f12c5f92cd068bdbf5f264d994c85156525a|plugin+required|https://thunderstore.io/package/download/Landoria/ModSentry/1.0.19/
+Drop_That|3.1.5|Valheim.DropThat.dll|9b4c1718932f48eb2d1fe8e50973dccb53e9947bc5f9903b87d3da05ab5efaf4|plugin+required|https://thunderstore.io/package/download/ASharpPen/Drop_That/3.1.5/
+Jotunn|2.30.0|Jotunn.dll|51d32cfbe2db5c203ffb8855c155d185d572dda72db49066905679d8ec5e3c46|plugin+required|https://thunderstore.io/package/download/ValheimModding/Jotunn/2.30.0/
+FarmGrid|1.0.0|FarmGrid.dll|35f77dd50625c30cc4fe20d49ea1fbd7e05f76a64c97eb0588cecba827916519|optional|https://thunderstore.io/package/download/Galateam/FarmGrid/1.0.0/
+# FirstPersonMode (Azumatt): moves the camera into the player's head for a first-person view
+# (per-player preference — hides/shrinks the head via its own config). Client-side visual mod,
+# depends only on BepInEx (not Jotunn). optional: each player who wants it installs+configures
+# it themselves; ModSentry allows-but-doesn't-require it. Added 2026-09-11, latest release
+# 1.3.12 (actively maintained through 1.0). Load-tested server-side on 1.0: loads CLEAN (no
+# TypeLoad/Harmony/dependency errors), so it won't break clients that run it (cf. the dropped Valheazy Favorite_Items).
+FirstPersonMode|1.3.12|FirstPersonMode.dll|f942c253a38b667845935c6819e9f63e9606499af6775c3533b98d9e9761e791|optional|https://thunderstore.io/package/download/Azumatt/FirstPersonMode/1.3.12/
+# FavoriteItems (ronaldoniz): Alt-click to mark inventory stacks as favorites, with a public
+# API + quick-stack integrations. Client-side optional mod (ModSentry_Optional) - each player
+# who wants it installs it; replaces the abandoned/broken Valheazy/Favorite_Items (0.1.5).
+# Deps only BepInEx (5.4.2350 = the 1.0 pack); built 2026-09-11. Client-only by design
+# (BepInProcess valheim.exe): BepInEx SKIPS it on the dedicated server, so the server-side
+# load-test is N/A - the remaining check is a real-client smoke test (install + Alt-click).
+# Bumped 1.1.0 -> 1.2.0 on 2026-09-12: optional ExtraSlots 1.2.3 special-slot protection via
+# its public API (NOT a required dependency; disabled by default).
+FavoriteItems|1.2.0|FavoriteItems.dll|acc41c9304952623c2024700245d3b723c25272f1f923737d53626d8d4caf22c|optional|https://thunderstore.io/package/download/ronaldoniz/FavoriteItems/1.2.0/
+# Unshamed (Azumatt): re-enables Steam achievements for players running mods. On 1.0 the achievement
+# gate (Achievements.CanGetAchievements / IsCheatedAtAll) refuses achievements while Game.isModded is
+# true (BepInEx sets it) — so every friend on our required client mods is blocked. Unshamed patches
+# CanGetAchievements to ignore the four cheat/modded flags, WITHOUT touching the vanilla
+# PlayerProfile.s_bypassCheatChecks switch (so spawned items still carry their cheated stamp normally,
+# unlike the vanilla `yesiuseddevcommandsbutiwantmyachievementsanyway` command). CLIENT-SIDE ONLY: no
+# ServerSync, nothing runs server-side, config is per-client (not server-synced) — so the server-side
+# load test is low value (real gate = a client smoke test). optional: each friend who wants achievements
+# installs it (ModSentry allows-but-doesn't-require). Deps only BepInEx. Added 2026-09-13, v1.0.4.
+# Per-client config (Azumatt.Unshamed.cfg): set `Enable Retroactive = true` to grant already-earned
+# achievements once on next load (default off). See client-modpack/INSTALL.md.
+Unshamed|1.0.4|Unshamed.dll|c7a58666fa8c1efbfdea6e17e6b0ceee64baec0b823eeaf09249fa1bfaba3a1e|optional|https://thunderstore.io/package/download/Azumatt/Unshamed/1.0.4/
+# BetterCarts (TastyChickenLegs): quick attach/detach, up to 4 players push, tunable cart
+# weight/damage. Bumped 1.1.0 -> 1.1.1 on 2026-09-10 (latest Thunderstore release) and tested
+# on 1.0: loads CLEAN (Loading [BetterCarts 1.1.1]; its server ConfigSync RPC registers, no
+# TypeLoad/MissingMethod). Depends only on BepInEx, not Jotunn. plugin+required: it has
+# server-authoritative config sync + changes cart physics, so it loads server-side AND every
+# client must run it (matching hash) for consistent carts.
+BetterCarts|1.1.1|BetterCarts.dll|b647395b0c1f893acabe1c9305b202b020ce11a828691fd23e9aa6e1db71d0d8|plugin+required|https://thunderstore.io/package/download/TastyChickenLegs/BetterCarts/1.1.1/
+# OneMapToRuleThemAll (DrummerCraig): shared map exploration (fog of war) + player map pins
+# across all players, optional client-side radar. Server-authoritative — pushes its config to
+# each client on connect — so it loads server-side AND every client must run it (matching hash):
+# plugin+required. Depends only on BepInEx, not Jotunn. Added 2026-09-10 (2.8.0); bumped
+# 2.8.0 -> 2.8.1 on 2026-09-12 ("fixed .explored file pathing for the new 1.0 save format").
+OneMapToRuleThemAll|2.8.1|OneMapToRuleThemAll.dll|5537a49ea56f682d4d64b1e6d8f5b336bd1d947a310bfe0d73e0e3f3a483244c|plugin+required|https://thunderstore.io/package/download/DrummerCraig/OneMapToRuleThemAll/2.8.1/
+# GlassPieces (blacks7ar): 63 glass/iron/copper build pieces, 2 materials, 1 minable resource + a
+# resource collector. RE-ENABLED 2026-09-13 now that it has a real 1.0 build: v1.2.6 "updated for
+# valheim 1.0 deepnorth" (the TypeLoadException/VTable break we were blocked on) and v1.2.7 fixed a
+# double-entry material in one recipe. Uses ServerSync + registers prefabs (PiecePrefabManager /
+# ZNetScene) and checks IsServer, so it must load server-side AND every client must match:
+# plugin+required (the pre-1.0 disabled line's `required`-only role was incomplete for a content mod).
+# Deps only BepInEx. Bumped 1.2.5 -> 1.2.7.
+# ***LOAD-TEST PENDING*** — was a hard TypeLoadException on 1.0; must verify a CLEAN boot
+# (verify-boot.sh --mod GlassPieces) before shipping. Gated on Ethan's all-clear (no restart yet).
+# cfg: per v1.2.7 changelog, DELETE the stale /config/bepinex/blacks7ar.GlassPieces.cfg on the VM at
+# apply time so the recipe fix takes effect (it regenerates on boot).
+GlassPieces|1.2.7|GlassPieces.dll|5bd47abe93b69ff291f4c76809b4c54cbd88d72bbae9fe177f33fbd1e41063ba|plugin+required|https://thunderstore.io/package/download/blacks7ar/GlassPieces/1.2.7/
+# --- DISABLED until each ships a Valheim 1.0 build (see note above) ---
+# (role shown = intended role once 1.0-ready.)
+# Huginn_Map|1.0.5|Huginn.dll|1108fec508f9096efbb73aa032ba72502cc92eefe7829bd614587fd4395fcfcd|plugin+required|https://thunderstore.io/package/download/NightOfGames/Huginn_Map/1.0.5/

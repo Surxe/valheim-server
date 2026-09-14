@@ -1,0 +1,402 @@
+# OneMapToRuleThemAll — default object catalog (shipped)
+# This is the catalog a fresh install starts from. It is AUTHORITATIVE and is
+# never overwritten once written. Edit it to change what is tracked, or delete
+# it and run om_gencatalog to regenerate against the current game version.
+#
+# Built from the game itself, not from keyword guesses:
+#   category = the prefab's components
+#   name     = HoverText, else the dropped item's localized name
+#   icon     = the ObjectDB item the object actually drops
+#   biome    = ZoneSystem vegetation/location data
+#
+# Rows are grouped by name: prefabs the game calls the same thing share one
+# row, one toggle and one pin label. The exact prefabs behind each row are
+# listed in the trailing comment, so identity is per-prefab, not by substring.
+#
+# COMMENTED rows are tracked=OFF by default. Uncomment to enable.
+#
+# Row ORDER is irrelevant: objects resolve by exact prefab name, not by
+# substring, so rows are sorted purely for readability.
+#
+# Format:  Biome | Type | Keyword | Display | Abbr | Icon
+#   Abbr defaults to the Display in PascalCase with separators removed
+#   (Copper vein -> CopperVein). It is the label drawn on the pin, so edit
+#   it freely; blank falls back to a Display truncation.
+#
+# Trailing comment: the exact prefabs behind the row, then the evidence for
+# how it was classified.
+#   bsrc=data     biome read from ZoneSystem vegetation / SpawnSystem / locations
+#   bsrc=curated  no placement table lists this prefab; value hand-checked
+#   bsrc=name     inferred from the prefab-name prefix (a guess)
+#   bsrc=none     no biome could be determined at all
+#   type/tier/pick/chop  the Destructible fields the Ore-vs-Tree call used
+
+# ── Creature ──────────────────────────────────────────
+AshLands | Creature | Asksvin | Asksvin | Asksvin |    # Asksvin bsrc=data
+AshLands | Creature | AsksvinHatchling | Asksvin Hatchling | AsksvinHatchling |    # Asksvin_hatchling bsrc=curated
+AshLands | Creature | Bonemaw | Bonemaw | Bonemaw |    # BonemawSerpent bsrc=data
+AshLands | Creature | CharredMarksman | Charred Marksman | CharredMarksman |    # Charred_Archer bsrc=data
+AshLands | Creature | CharredTwitcher | Charred Twitcher | CharredTwitcher |    # Charred_Twitcher bsrc=data
+AshLands | Creature | CharredWarlock | Charred Warlock | CharredWarlock |    # Charred_Mage bsrc=name
+AshLands | Creature | CharredWarrior | Charred Warrior | CharredWarrior |    # Charred_Melee bsrc=data
+AshLands | Creature | FallenValkyrie | Fallen Valkyrie | FallenValkyrie |    # FallenValkyrie bsrc=data
+AshLands | Creature | LavaBlob | Lava Blob | LavaBlob |    # BlobLava bsrc=data
+AshLands | Creature | LordReto | Lord Reto | LordReto |    # Charred_Melee_Dyrnwyn bsrc=name
+AshLands | Creature | Morgen | Morgen | Morgen |    # Morgen, Morgen_NonSleeping bsrc=data
+# AshLands | Creature | SummonedCharredWarrior | Summoned Charred Warrior | SummonedCharredWarrior |    # Charred_Archer_Fader, Charred_Melee_Fader bsrc=name
+# AshLands | Creature | SummonedTwitcher | Summoned Twitcher | SummonedTwitcher |    # Charred_Twitcher_Summoned bsrc=name
+AshLands | Creature | Volture | Volture | Volture |    # Volture bsrc=data
+BlackForest | Creature | Bear | Bear | Bear |    # Bjorn bsrc=data
+# BlackForest | Creature | Brenna | Brenna | Brenna |    # Skeleton_Hildir, Skeleton_Hildir_nochest bsrc=curated
+BlackForest | Creature | Greydwarf | Greydwarf | Greydwarf |    # Greydwarf bsrc=data
+BlackForest | Creature | GreydwarfBrute | Greydwarf Brute | GreydwarfBrute |    # Greydwarf_Elite bsrc=data
+BlackForest | Creature | RancidRemains | Rancid Remains | RancidRemains |    # Skeleton_Poison bsrc=curated
+# BlackForest | Creature | SummonedTroll | Summoned Troll | SummonedTroll |    # Troll_Summoned bsrc=name
+# BlackForest | Creature | TheElder | The Elder | TheElder |    # gd_king bsrc=curated
+BlackForest | Creature | Troll | Troll | Troll |    # Troll bsrc=data
+# Mountain | Creature | Bat | Bat | Bat |    # Bat bsrc=author
+# Swamp | Creature | Bonemass | Bonemass | Bonemass |    # Bonemass bsrc=author
+# General | Creature | Chicken | Chicken | Chicken |    # Chicken bsrc=none
+# Meadows | Creature | Eikthyr | Eikthyr | Eikthyr |    # Eikthyr bsrc=author
+# AshLands | Creature | Fader | Fader | Fader |    # Fader bsrc=author
+BlackForest | Creature | Ghost | Ghost | Ghost |    # Ghost bsrc=author
+# General | Creature | Hen | Hen | Hen |    # Hen bsrc=none
+# General | Creature | Mistile | Mistile | Mistile |    # Mistile bsrc=none
+Swamp | Creature | Surtling | Surtling | Surtling |    # Surtling bsrc=author
+# General | Creature | TrainingDummy | TrainingDummy | TrainingDummy |    # TrainingDummy bsrc=none
+Mountain | Creature | Ulv | Ulv | Ulv |    # Ulv bsrc=author
+Meadows | Creature | Boar | Boar | Boar |    # Boar bsrc=data
+Meadows | Creature | Deer | Deer | Deer |    # Deer bsrc=data
+Swamp | Creature | Draugr | Draugr | Draugr |    # Draugr, Draugr_Ranged bsrc=author
+Plains | Creature | Fuling | Fuling | Fuling |    # Goblin, GoblinArcher bsrc=author
+BlackForest | Creature | GreydwarfShaman | Greydwarf Shaman | GreydwarfShaman |    # Greydwarf_Shaman bsrc=author
+Meadows | Creature | Greyling | Greyling | Greyling |    # Greyling bsrc=data
+Meadows | Creature | Neck | Neck | Neck |    # Neck bsrc=data
+Meadows | Creature | Piggy | Piggy | Piggy |    # Boar_piggy bsrc=curated
+BlackForest | Creature | Skeleton | Skeleton | Skeleton |    # Skeleton, Skeleton_NoArcher bsrc=author
+# Mistlands | Creature | DvergerTest | DvergerTest | DvergerTest |    # DvergerTest bsrc=name
+Mistlands | Creature | DvergrMage | Dvergr Mage | DvergrMage |    # DvergerMage, DvergerMageFire, DvergerMageIce, DvergerMageSupport bsrc=name
+Mistlands | Creature | DvergrRogue | Dvergr Rogue | DvergrRogue |    # Dverger, DvergerAshlands bsrc=data
+Mistlands | Creature | Gjall | Gjall | Gjall |    # Gjall bsrc=data
+Mistlands | Creature | Hare | Hare | Hare |    # Hare bsrc=data
+Mistlands | Creature | Hive | Hive | Hive |    # Hive bsrc=curated
+Mistlands | Creature | Seeker | Seeker | Seeker |    # Seeker bsrc=data
+Mistlands | Creature | SeekerBrood | Seeker Brood | SeekerBrood |    # SeekerBrood bsrc=data
+Mistlands | Creature | SeekerSoldier | Seeker Soldier | SeekerSoldier |    # SeekerBrute bsrc=data
+# Mistlands | Creature | Skelett | Skelett | Skelett |    # Skeleton_Friendly bsrc=curated
+# Mistlands | Creature | TheQueen | The Queen | TheQueen |    # SeekerQueen bsrc=name
+# Mistlands | Creature | TheHive | TheHive | TheHive |    # TheHive bsrc=curated
+Mistlands | Creature | Tick | Tick | Tick |    # Tick bsrc=data
+Mountain | Creature | Cultist | Cultist | Cultist |    # Fenring_Cultist bsrc=curated
+Mountain | Creature | Drake | Drake | Drake |    # Hatchling bsrc=data
+Mountain | Creature | Fenring | Fenring | Fenring |    # Fenring bsrc=data
+# Mountain | Creature | FrostBlob | Frost Blob | FrostBlob |    # BlobFrost bsrc=name
+# Mountain | Creature | Geirrhafa | Geirrhafa | Geirrhafa |    # Fenring_Cultist_Hildir, Fenring_Cultist_Hildir_nochest bsrc=curated
+# Mountain | Creature | Moder | Moder | Moder |    # Dragon bsrc=curated
+Mountain | Creature | StoneGolem | Stone Golem | StoneGolem |    # StoneGolem bsrc=data
+Mountain | Creature | Wolf | Wolf | Wolf |    # Wolf bsrc=data
+Mountain | Creature | WolfCub | Wolf Cub | WolfCub |    # Wolf_cub bsrc=curated
+Ocean | Creature | Fish1 | Fish1 | Fish1 | Fish1   # Fish1 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish10 | Fish10 | Fish10 | Fish10   # Fish10 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish11 | Fish11 | Fish11 | Fish11   # Fish11 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish12 | Fish12 | Fish12 | Fish12   # Fish12 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish2 | Fish2 | Fish2 | Fish2   # Fish2 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish3 | Fish3 | Fish3 | Fish3   # Fish3 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish4cave | Fish4_cave | Fish4Cave | Fish4_cave   # Fish4_cave bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish5 | Fish5 | Fish5 | Fish5   # Fish5 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish6 | Fish6 | Fish6 | Fish6   # Fish6 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish7 | Fish7 | Fish7 | Fish7   # Fish7 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish8 | Fish8 | Fish8 | Fish8   # Fish8 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Fish9 | Fish9 | Fish9 | Fish9   # Fish9 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Ocean | Creature | Serpent | Serpent | Serpent |    # Serpent bsrc=data
+Plains | Creature | Deathsquito | Deathsquito | Deathsquito |    # Deathsquito bsrc=data
+Plains | Creature | FulingBerserker | Fuling Berserker | FulingBerserker |    # GoblinBrute bsrc=data
+Plains | Creature | FulingShaman | Fuling Shaman | FulingShaman |    # GoblinShaman bsrc=name
+Plains | Creature | Growth | Growth | Growth |    # BlobTar bsrc=name
+Plains | Creature | Lox | Lox | Lox |    # Lox bsrc=data
+Plains | Creature | LoxCalf | Lox Calf | LoxCalf |    # Lox_Calf bsrc=curated
+Plains | Creature | RiktigFuling | Riktig Fuling | RiktigFuling |    # Goblin_Gem bsrc=name
+Plains | Creature | Root | Root | Root |    # TentaRoot bsrc=name
+Plains | Creature | SummonedRoot | Summoned Root | SummonedRoot |    # staff_greenroots_tentaroot bsrc=name
+# Plains | Creature | Thungr | Thungr | Thungr |    # GoblinBrute_Hildir bsrc=name
+Plains | Creature | Vile | Vile | Vile |    # Unbjorn bsrc=data
+# Plains | Creature | Yagluth | Yagluth | Yagluth |    # GoblinKing bsrc=name
+# Plains | Creature | Zil | Zil | Zil |    # GoblinShaman_Hildir, GoblinShaman_Hildir_nochest bsrc=name
+# Plains | Creature | ZilThungr | Zil & Thungr | ZilThungr |    # GoblinBruteBros, GoblinBruteBros_nochest bsrc=name
+Swamp | Creature | Abomination | Abomination | Abomination |    # Abomination bsrc=data
+Swamp | Creature | Blob | Blob | Blob |    # Blob bsrc=data
+Swamp | Creature | DraugrElite | Draugr Elite | DraugrElite |    # Draugr_Elite bsrc=data
+Swamp | Creature | Kvastur | Kvastur | Kvastur |    # BogWitchKvastur bsrc=curated
+Swamp | Creature | Leech | Leech | Leech |    # Leech, Leech_cave bsrc=data
+Swamp | Creature | Oozer | Oozer | Oozer |    # BlobElite bsrc=data
+Swamp | Creature | Wraith | Wraith | Wraith |    # Wraith bsrc=data
+
+# Added for the Deep North release. Rows below come from om_gencatalog run against
+# that build; biome buckets and default-on/off are exactly as it derived them.
+DeepNorth | Creature | BabySeal | Baby Seal | BabySeal |    # Seal_Pup bsrc=data
+DeepNorth | Creature | Barka | Barka | Barka | TrophyBarka   # Barka bsrc=data
+DeepNorth | Creature | Elaking | Elaking | Elaking | TrophyElaking   # Elaking, ElakingLantern bsrc=data
+DeepNorth | Creature | Hexen | Hexen | Hexen | TrophyJotunWitch   # JotunWitch bsrc=data
+DeepNorth | Creature | Krigen | Krigen | Krigen | TrophyJotunWarrior   # JotunWarrior, JotunWarriorDualWield bsrc=data
+DeepNorth | Creature | Moose | Moose | Moose | TrophyMoose   # Moose bsrc=data
+DeepNorth | Creature | Seal | Seal | Seal | TrophySeal   # Seal bsrc=data
+DeepNorth | Creature | Shadow | Shadow | Shadow |    # ShadowPerson bsrc=data
+# Bosses and boss summons are switched off by rule (see CatalogGenerator.BossDisplays): they are
+# one-time encounters, so a permanent pin is noise. No placement table lists any of the seven
+# Aspects, because they are summoned — six read bsrc=none and the Crawling Matriarch reads
+# bsrc=name, meaning its biome was inferred from the prefab name rather than from spawn data.
+# Kall Fimbulbringer is the Deep North boss. Two of the eight sort into other biome blocks
+# below: Kall Fimbulbringer under General, the Crawling Matriarch under Mistlands.
+# General | Creature | AspectoftheDragonMother | Aspect of the Dragon Mother | AspectOfTheDragonMother |    # Aspect_Moder bsrc=none
+# General | Creature | AspectoftheEmeraldFlame | Aspect of the Emerald Flame | AspectOfTheEmeraldFlame |    # Aspect_Fader bsrc=none
+# General | Creature | AspectoftheLightningStag | Aspect of the Lightning Stag | AspectOfTheLightningStag |    # Aspect_Eikthyr bsrc=none
+# General | Creature | AspectoftheLivingForest | Aspect of the Living Forest | AspectOfTheLivingForest |    # Aspect_Elder bsrc=none
+# General | Creature | AspectoftheTwistedSoul | Aspect of the Twisted Soul | AspectOfTheTwistedSoul |    # Aspect_Yagluth bsrc=none
+# General | Creature | AspectoftheWrithingDead | Aspect of the Writhing Dead | AspectOfTheWrithingDead |    # Aspect_Bonemass bsrc=none
+General | Creature | Bjornspiritcaller | Bjorn_spiritcaller | BjornSpiritcaller |    # Bjorn_spiritcaller bsrc=none
+General | Creature | Boarspiritcaller | Boar_spiritcaller | BoarSpiritcaller |    # Boar_spiritcaller bsrc=none
+General | Creature | DeerWhite | Deer_White | DeerWhite | TrophyDeerWhite   # Deer_White bsrc=none
+General | Creature | EyelessOne | Eyeless One | EyelessOne | TrophyMole   # ElakingMole bsrc=none
+General | Creature | FallenWarrior | Fallen Warrior | FallenWarrior |    # FallenWarrior bsrc=none
+General | Creature | Frysling | Frysling | Frysling |    # Frysling bsrc=none
+# General | Creature | KallFimbulbringer | Kall Fimbulbringer | KallFimbulbringer |    # FrozenKing, FrozenKing_p2, FrozenKing_p3 bsrc=none
+General | Creature | MooseCalf | Moose Calf | MooseCalf |    # Moose_calf bsrc=none
+General | Creature | Moosespiritcaller | Moose_spiritcaller | MooseSpiritcaller |    # Moose_spiritcaller bsrc=none
+General | Creature | ShapelessPulp | Shapeless Pulp | ShapelessPulp | TrophyBlob_Morkhalla   # BlobMork bsrc=none
+General | Creature | Tendril | Tendril | Tendril |    # Tendril bsrc=none
+General | Creature | TheVoid | The Void | TheVoid |    # Ghost_old, Ghost_Void bsrc=none
+General | Creature | TinyPulp | Tiny Pulp | TinyPulp |    # BlobMorkMini bsrc=none
+General | Creature | Wolfspiritcaller | Wolf_spiritcaller | WolfSpiritcaller |    # Wolf_spiritcaller bsrc=none
+# Mistlands | Creature | AspectoftheCrawlingMatriarch | Aspect of the Crawling Matriarch | AspectOfTheCrawlingMatriarch |    # Aspect_SeekerQueen bsrc=name
+Mistlands | Creature | ImprisonedDvergr | Imprisoned Dvergr | ImprisonedDvergr | TrophyDvergr   # DvergerDeepNorth bsrc=name
+Mountain | Creature | FrostWisp | FrostWisp | FrostWisp |    # FrostWisp bsrc=name
+Mountain | Creature | Gammeltroll | Gammeltroll | Gammeltroll |    # TrollFrost bsrc=name
+Plains | Creature | CaptiveFuling | Captive Fuling | CaptiveFuling |    # GoblinDeepNorth bsrc=name
+Swamp | Creature | Writhan | Writhan | Writhan | TrophyWrithan   # Writhan bsrc=data
+
+# ── Pickable ──────────────────────────────────────────
+# AshLands | Pickable | CharredSkull | Charred Skull | CharredSkull | Charredskull   # Pickable_Charredskull bsrc=data
+# AshLands | Pickable | DyrnwynBladeFragment | Dyrnwyn Blade Fragment | DyrnwynBladeFragment | DyrnwynBladeFragment   # Pickable_Swordpiece2 bsrc=curated
+# AshLands | Pickable | DyrnwynHiltFragment | Dyrnwyn Hilt Fragment | DyrnwynHiltFragment | DyrnwynHiltFragment   # Pickable_Swordpiece1 bsrc=curated
+# AshLands | Pickable | DyrnwynTipFragment | Dyrnwyn Tip Fragment | DyrnwynTipFragment | DyrnwynTipFragment   # Pickable_Swordpiece3 bsrc=curated
+AshLands | Pickable | Grausten | Grausten | Grausten | Grausten   # Pickable_Ashstone bsrc=data
+AshLands | Pickable | Meteorite | Meteorite | Meteorite | IronOre   # Pickable_Meteorite bsrc=curated
+AshLands | Pickable | MoltenCore | Molten Core | MoltenCore | MoltenCore   # Pickable_MoltenCoreStand bsrc=curated
+AshLands | Pickable | PotShard | Pot Shard | PotShard | Pot_Shard_Green   # Pickable_Pot_Shard bsrc=data
+AshLands | Pickable | SmokePuff | Smoke Puff | SmokePuff | MushroomSmokePuff   # Pickable_SmokePuff bsrc=data
+AshLands | Pickable | SulfurRock | Sulfur Rock | SulfurRock | SulfurStone   # Pickable_SulfurRock bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+AshLands | Pickable | VoltureEgg | Volture Egg | VoltureEgg | VoltureEgg   # Pickable_VoltureEgg bsrc=curated
+BlackForest | Pickable | Blueberries | Blueberries | Blueberries | Blueberries   # BlueberryBush bsrc=data type=Default tier=0 pick=Normal chop=Weak
+BlackForest | Pickable | Carrot | Carrot | Carrot | Carrot   # Pickable_Carrot bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+BlackForest | Pickable | CarrotSeeds | Carrot Seeds | CarrotSeeds | CarrotSeeds   # Pickable_SeedCarrot bsrc=data type=Default tier=0 pick=Normal chop=Normal
+# BlackForest | Pickable | SkeletalRemains | Skeletal Remains | SkeletalRemains | BoneFragments   # Pickable_ForestCryptRemains01, Pickable_ForestCryptRemains02, Pickable_ForestCryptRemains03, Pickable_ForestCryptRemains04, Pickable_MountainRemains01_buried bsrc=name
+BlackForest | Pickable | SurtlingCore | Surtling Core | SurtlingCore | SurtlingCore   # Pickable_SurtlingCoreStand bsrc=curated
+BlackForest | Pickable | TinOre | Tin Ore | TinOre | TinOre   # Pickable_Tin bsrc=curated
+BlackForest | Pickable | YellowMushroom | Yellow Mushroom | YellowMushroom | MushroomYellow   # Pickable_Mushroom_yellow bsrc=curated
+# Meadows | Pickable | Branch | Branch | Branch | Wood   # Pickable_Branch bsrc=data
+Meadows | Pickable | Dandelion | Dandelion | Dandelion | Dandelion   # Pickable_Dandelion bsrc=data
+Meadows | Pickable | Flint | Flint | Flint | Flint   # Pickable_Flint bsrc=data
+Meadows | Pickable | Mushroom | Mushroom | Mushroom | Mushroom   # Pickable_Mushroom bsrc=data
+Meadows | Pickable | Raspberries | Raspberries | Raspberries | Raspberry   # RaspberryBush bsrc=data type=Default tier=0 pick=Normal chop=Weak
+# Meadows | Pickable | Rock | Rock | Rock | StoneRock   # Pickable_StoneRock bsrc=data
+# Meadows | Pickable | Stone | Stone | Stone | Stone   # Pickable_HardRockOffspring, Pickable_Stone, Placeable_Stone bsrc=data
+Mistlands | Pickable | BlackCore | Black Core | BlackCore | BlackCore   # Pickable_BlackCoreStand bsrc=curated
+# General | Pickable | BlueMushroom | Blue Mushroom | BlueMushroom | MushroomBlue   # Pickable_Mushroom_blue bsrc=author
+# General | Pickable | CoinPile | Coin Pile | CoinPile | Coins   # Pickable_DvergrMineTreasure bsrc=author
+Mistlands | Pickable | DvergrLantern | Dvergr Lantern | DvergrLantern | Lantern   # Pickable_DvergrLantern bsrc=name
+Mistlands | Pickable | DvergrTankard | Dvergr Tankard | DvergrTankard | Tankard_dvergr   # Pickable_DvergrStein bsrc=name
+Mistlands | Pickable | Fiddlehead | Fiddlehead | Fiddlehead | Fiddleheadfern   # Pickable_Fiddlehead bsrc=curated
+Mistlands | Pickable | JotunPuffs | Jotun Puffs | JotunPuffs | MushroomJotunPuffs   # Pickable_Mushroom_JotunPuffs bsrc=data
+Mistlands | Pickable | Magecap | Magecap | Magecap | MushroomMagecap   # Pickable_Mushroom_Magecap bsrc=data
+Mistlands | Pickable | RoyalJelly | Royal Jelly | RoyalJelly | RoyalJelly   # Pickable_RoyalJelly bsrc=curated
+Swamp | Pickable | Turnip | Turnip | Turnip | Turnip   # Pickable_DvergerThing, Pickable_Turnip bsrc=author
+Mistlands | Pickable | VineberryCluster | Vineberry Cluster | VineberryCluster | Vineberry   # VineAsh, VineGreen bsrc=curated
+# Mistlands | Pickable | Wisp | Wisp | Wisp | Wisp   # LuredWisp bsrc=curated
+Mountain | Pickable | Crystal | Crystal | Crystal | Crystal   # Pickable_MountainCaveCrystal bsrc=name type=Default tier=0 pick=Weak chop=Weak
+Mountain | Pickable | DragonEgg | Dragon Egg | DragonEgg | DragonEgg   # Pickable_DragonEgg bsrc=curated
+Mountain | Pickable | FenrisHair | Fenris Hair | FenrisHair | WolfHairBundle   # hanging_hairstrands, Pickable_Hairstrands01, Pickable_Hairstrands02 bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Mountain | Pickable | MeatPile | Meat Pile | MeatPile | Entrails   # Pickable_MeatPile bsrc=curated
+Mountain | Pickable | Obsidian | Obsidian | Obsidian | Obsidian   # Pickable_MountainCaveObsidian, Pickable_Obsidian bsrc=name type=Default tier=0 pick=Weak chop=Weak
+Mountain | Pickable | Onion | Onion | Onion | Onion   # Pickable_Onion bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Mountain | Pickable | OnionSeeds | Onion Seeds | OnionSeeds | OnionSeeds   # Pickable_SeedOnion bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+# Ocean | Pickable | FishingRod | Fishing Rod | FishingRod | FishingRod   # Pickable_Fishingrod bsrc=name
+Plains | Pickable | Barley | Barley | Barley | Barley   # Pickable_Barley, Pickable_Barley_Wild bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Plains | Pickable | Cloudberries | Cloudberries | Cloudberries | Cloudberry   # CloudberryBush bsrc=data type=Default tier=0 pick=Normal chop=Weak
+Plains | Pickable | Flax | Flax | Flax | Flax   # Pickable_Flax, Pickable_Flax_Wild bsrc=curated type=Default tier=0 pick=Normal chop=Normal
+Plains | Pickable | FulingTotem | Fuling Totem | FulingTotem | GoblinTotem   # goblin_totempole bsrc=name
+Plains | Pickable | Tar | Tar | Tar | Tar   # Pickable_Tar, Pickable_TarBig bsrc=name
+Swamp | Pickable | BogIron | Bog Iron | BogIron | IronOre   # Pickable_BogIronOre bsrc=curated
+BlackForest | Pickable | Thistle | Thistle | Thistle | Thistle   # Pickable_Thistle bsrc=author
+Swamp | Pickable | TurnipSeeds | Turnip Seeds | TurnipSeeds | TurnipSeeds   # Pickable_SeedTurnip bsrc=data type=Default tier=0 pick=Normal chop=Normal
+
+# Added for the Deep North release (see the note in the Creature section).
+DeepNorth | Pickable | KaleSeeds | Kale Seeds | KaleSeeds | KaleSeeds   # Pickable_SeedKale bsrc=data type=Default tier=0 pick=Normal chop=Normal
+DeepNorth | Pickable | Lingonberries | Lingonberries | Lingonberries | Lingonberry   # LingonberryBush bsrc=data type=Default tier=0 pick=Normal chop=Weak
+DeepNorth | Pickable | Snowball | Snowball | Snowball | Snowball   # Pickable_Snowball bsrc=data
+General | Pickable | Bloodstone | Bloodstone | Bloodstone | GemstoneRed   # Morkhalla_Eye7_gemstone bsrc=none
+General | Pickable | Draumyx | Draumyx | Draumyx | AncientGemstoneBlack   # Morkhalla_Eye1 bsrc=none
+General | Pickable | Embers | Embers | Embers | FaderEmber   # LuredFaderEmber bsrc=none
+General | Pickable | Grimvarn | Grimvarn | Grimvarn | AncientGemstoneGreen   # Morkhalla_Eye2 bsrc=none
+General | Pickable | Iolite | Iolite | Iolite | GemstoneBlue   # Morkhalla_Eye5_gemstone bsrc=none
+General | Pickable | Jade | Jade | Jade | GemstoneGreen   # Morkhalla_Eye6_gemstone bsrc=none
+General | Pickable | Kale | Kale | Kale | Kale   # Pickable_Kale bsrc=none type=Default tier=0 pick=Normal chop=Normal
+General | Pickable | LuminousLarva | Luminous Larva | LuminousLarva | GlowWorm   # Pickable_GlowWorm bsrc=none
+General | Pickable | OatSeeds | Oat Seeds | OatSeeds | OatSeeds   # Pickable_Oat bsrc=none type=Default tier=0 pick=Normal chop=Normal
+General | Pickable | Poteitr | Poteitr | Poteitr | Poteitr   # Pickable_Poteitr bsrc=none type=Default tier=0 pick=Normal chop=Normal
+General | Pickable | Solryth | Solryth | Solryth | AncientGemstoneOrange   # Morkhalla_Eye3 bsrc=none
+General | Pickable | Veydris | Veydris | Veydris | AncientGemstonePurple   # Morkhalla_Eye4 bsrc=none
+Mountain | Pickable | Frostcore | Frostcore | Frostcore | FrostCore   # Pickable_FrostCoreHanger bsrc=name
+
+# ── Ore ──────────────────────────────────────────
+BlackForest | Ore | CopperDeposit | Copper Deposit | CopperDeposit | CopperOre   # rock4_copper bsrc=data type=Default tier=0 pick=Normal chop=Immune
+# BlackForest | Ore | Coppervein | Copper vein | CopperVein | CopperOre   # MineRock_Copper bsrc=curated
+BlackForest | Ore | TinDeposit | Tin Deposit | TinDeposit | TinOre   # MineRock_Tin bsrc=data type=Default tier=0 pick=Normal chop=Immune
+# General | Ore | Ironvein | Iron vein | IronVein | IronOre   # MineRock_Iron bsrc=none
+# General | Ore | Rock | Rock | Rock | Stone   # MineRock_Stone bsrc=none
+Mistlands | Ore | AncientArmour | Ancient Armour | AncientArmour | IronScrap   # giant_helmet1, giant_helmet2 bsrc=data type=Default tier=3 pick=Normal chop=Immune
+Mistlands | Ore | AncientSword | Ancient Sword | AncientSword | IronScrap   # giant_sword1, giant_sword2 bsrc=data type=Default tier=3 pick=Normal chop=Immune
+Mistlands | Ore | PetrifiedBone | Petrified Bone | PetrifiedBone | BlackMarble   # giant_ribs, giant_skull bsrc=data type=Default tier=3 pick=Normal chop=Immune
+Mistlands | Ore | SoftTissue | Soft Tissue | SoftTissue | Softtissue   # giant_brain bsrc=curated type=Default tier=3 pick=Normal chop=Immune
+Mistlands | Ore | YggdrasilRoot | YggdrasilRoot | Root |    # YggdrasilRoot bsrc=data
+Mountain | Ore | ObsidianDeposit | Obsidian Deposit | ObsidianDeposit | Obsidian   # MineRock_Obsidian bsrc=data type=Default tier=2 pick=Normal chop=Immune
+# Mountain | Ore | SilverDeposit | Silver Deposit | SilverDeposit | SilverOre   # rock3_silver bsrc=curated type=Default tier=2 pick=Normal chop=Immune
+# Mountain | Ore | SilverVein | Silver Vein | SilverVein | SilverOre   # silvervein bsrc=data type=Default tier=2 pick=Normal chop=Immune
+Ocean | Ore | FlametalOre | Flametal Ore | FlametalOre | FlametalOreNew   # LeviathanLava, MineRock_Meteorite bsrc=name
+Ocean | Ore | Leviathan | Leviathan | Leviathan | Chitin   # Leviathan bsrc=data
+# Swamp | Ore | MuddyScrapPile | Muddy Scrap Pile | MuddyScrapPile | IronScrap   # mudpile, mudpile2, mudpile_beacon, mudpile_old bsrc=data type=Default tier=0 pick=Normal chop=Immune
+
+# Added for the Deep North release (see the note in the Creature section).
+Mountain | Ore | IceShore | IceShore | Ice |    # IceShore bsrc=name
+Mountain | Ore | PetrifiedGammeltroll | Petrified Gammeltroll | PetrifiedGammeltroll | Stone   # TrollFrost_Frac_arm, TrollFrost_Frac_legs bsrc=name
+
+# ── Spawner ──────────────────────────────────────────
+AshLands | Spawner | EffigyofMalice | Effigy of Malice | Effigy |    # Spawner_CharredCross bsrc=name type=Default tier=0 pick=Normal chop=Weak
+AshLands | Spawner | MonumentofTorment | Monument of Torment | MonumentOfTorment | Grausten   # Spawner_CharredStone, Spawner_CharredStone_Elite, Spawner_CharredStone_event bsrc=name type=Default tier=0 pick=Normal chop=Normal
+BlackForest | Spawner | GreydwarfNest | Greydwarf Nest | GreydwarfNest | AncientSeed   # Spawner_GreydwarfNest bsrc=name type=Default tier=0 pick=Ignore chop=Normal
+Swamp | Spawner | EvilBonePile | Evil Bone Pile | EPile |    # BonePileSpawner bsrc=author type=Default tier=0 pick=Immune chop=Immune
+# BlackForest | Spawner | EvilHeartForest | EvilHeart_Forest | EvilHeartForest | AncientSeed   # EvilHeart_Forest bsrc=author type=Default tier=0 pick=Immune chop=Immune
+Swamp | Spawner | BodyPile | Body Pile | Pile |    # Spawner_DraugrPile bsrc=name type=Default tier=0 pick=Ignore chop=Ignore
+# Swamp | Spawner | EvilHeartSwamp | EvilHeart_Swamp | EvilHeartSwamp | AncientSeed   # EvilHeart_Swamp bsrc=name type=Default tier=0 pick=Immune chop=Immune
+
+# Added for the Deep North release (see the note in the Creature section).
+General | Spawner | HexahedricPulp | Hexahedric Pulp | HexahedricPulp | IronScrap   # BlobMorkBig bsrc=none type=Default tier=0 pick=Resistant chop=Normal
+General | Spawner | WardrobeShaft | Wardrobe Shaft | WardrobeShaft | Frostwood   # Spawner_Hole bsrc=none type=Default tier=0 pick=Weak chop=Normal
+Mountain | Spawner | MaliciousIce | Malicious Ice | MaliciousIce | HatefulBlood   # BlackIce_Core bsrc=name type=Default tier=0 pick=Weak chop=Weak
+
+# ── Location ──────────────────────────────────────────
+# AshLands | Location | AshlandsRuin | Ashlands Ruin | AshlandsRuin |    # AshlandRuins bsrc=data
+AshLands | Location | CharredFortress | Charred Fortress | Fort |    # CharredFortress bsrc=data
+# AshLands | Location | CharredRuin | Charred Ruin | CharredRuin |    # CharredRuins1, CharredRuins2, CharredRuins3, CharredRuins4 bsrc=data
+# AshLands | Location | CharredSpawner | Charred Spawner | CharredSpawner |    # CharredStone_Spawner bsrc=data
+# AshLands | Location | CharredTower | Charred Tower | CharredTower |    # CharredTowerRuins1, CharredTowerRuins1_dvergr, CharredTowerRuins2, CharredTowerRuins3 bsrc=data
+# AshLands | Location | FaderAltar | Fader Altar | FaderAltar |    # FaderLocation bsrc=data
+# AshLands | Location | FortressRuin | Fortress Ruin | FortressRuin |    # FortressRuins bsrc=data
+# AshLands | Location | LeviathanLava | LeviathanLava | LeviathanLava |    # LeviathanLava bsrc=data
+AshLands | Location | MorgenHole | Morgen Hole | Morgen |    # MorgenHole1, MorgenHole2, MorgenHole3 bsrc=data
+AshLands | Location | PlaceofMystery | Place of Mystery | Mystery |    # PlaceofMystery1, PlaceofMystery2, PlaceofMystery3 bsrc=data
+# AshLands | Location | SulfurArch | Sulfur Arch | SulfurArch |    # SulfurArch bsrc=data
+# AshLands | Location | VoltureNest | Volture Nest | VoltureNest |    # VoltureNest bsrc=data
+BlackForest | Location | BurialChamber | Burial Chamber | BC |    # Crypt2, Crypt3, Crypt4, Hildir_crypt bsrc=data
+# BlackForest | Location | GreydwarfCamp | Greydwarf Camp | GreydwarfCamp |    # Greydwarf_camp1 bsrc=data
+# BlackForest | Location | HaldorTrader | Haldor (Trader) | HaldorTrader |    # Vendor_BlackForest bsrc=data
+# BlackForest | Location | RockClearing | Rock Clearing | RockClearing |    # BigRockClearing bsrc=data
+# BlackForest | Location | Ruin | Ruin | Ruin |    # CombatRuin01, Mistlands_GuardTower1_ruined_new, Mistlands_GuardTower1_ruined_new2, Mistlands_GuardTower3_ruined_new, Ruin1, Ruin2, Ruin3 bsrc=data
+# Meadows | Location | Runestone | Runestone | Runestone |    # Runestone_Ashlands, Runestone_BlackForest, Runestone_Boars, Runestone_Draugr, Runestone_Greydwarfs, Runestone_Meadows, Runestone_Mistlands, Runestone_Mountains, Runestone_Plains, Runestone_Swamps bsrc=author
+# BlackForest | Location | TheElderAltar | The Elder Altar | TheElderAltar |    # GDKing bsrc=data
+BlackForest | Location | TrollCave | Troll Cave | Troll |    # TrollCave02 bsrc=data
+Meadows | Location | AbandonedFarm | Abandoned Farm | Farm |    # WoodFarm1 bsrc=data
+Meadows | Location | Beehive | Beehive | BeeHive | QueenBee   # Beehive bsrc=curated
+# Meadows | Location | AbandonedVillage | Abandoned Village | AbandonedVillage |    # WoodVillage1 bsrc=data
+# Meadows | Location | Dolmen | Dolmen | Dolmen |    # Dolmen01, Dolmen02, Dolmen03 bsrc=data
+# Meadows | Location | EikthyrAltar | Eikthyr Altar | EikthyrAltar |    # Eikthyrnir bsrc=data
+# Meadows | Location | SacrificialStones | Sacrificial Stones | SacrificialStones |    # StartTemple bsrc=data
+# Meadows | Location | ShipSetting | Ship Setting | ShipSetting |    # ShipSetting01 bsrc=data
+# Meadows | Location | StoneCircle | Stone Circle | StoneCircle |    # StoneCircle bsrc=data
+# Meadows | Location | WoodHouse | Wood House | WoodHouse |    # WoodHouse1, WoodHouse10, WoodHouse11, WoodHouse12, WoodHouse13, WoodHouse2, WoodHouse3, WoodHouse4, WoodHouse5, WoodHouse6, WoodHouse7, WoodHouse8, WoodHouse9 bsrc=data
+# Mistlands | Location | DvergrExcavation | Dvergr Excavation | DvergrExcavation |    # Mistlands_Excavation1, Mistlands_Excavation2, Mistlands_Excavation3 bsrc=data
+# Mistlands | Location | DvergrGuardTower | Dvergr Guard Tower | DvergrGuardTower |    # Mistlands_GuardTower1_new, Mistlands_GuardTower2_new, Mistlands_GuardTower3_new bsrc=data
+# Mistlands | Location | DvergrHarbour | Dvergr Harbour | DvergrHarbour |    # Mistlands_Harbour1 bsrc=data
+# Mistlands | Location | DvergrLighthouse | Dvergr Lighthouse | DvergrLighthouse |    # Mistlands_Lighthouse1_new bsrc=data
+# Mistlands | Location | GiantRemains | Giant Remains | GiantRemains |    # Mistlands_Giant1, Mistlands_Giant2 bsrc=data
+Mistlands | Location | InfestedMine | Infested Mine | Mine |    # Mistlands_DvergrTownEntrance1, Mistlands_DvergrTownEntrance2 bsrc=data
+# Mistlands | Location | QueensLair | Queen's Lair | QueensLair |    # Mistlands_DvergrBossEntrance1 bsrc=data
+# Mistlands | Location | RoadPost | Road Post | RoadPost |    # Mistlands_RoadPost1 bsrc=data
+# Mistlands | Location | RockSpire | Rock Spire | RockSpire |    # Mistlands_RockSpire1 bsrc=data
+# Mistlands | Location | Statue | Statue | Statue |    # Mistlands_Statue1, Mistlands_Statue2 bsrc=data
+# Mistlands | Location | Statues | Statues | Statues |    # Mistlands_StatueGroup1 bsrc=data
+# Mistlands | Location | SwordStones | Sword Stones | SwordStones |    # Mistlands_Swords1, Mistlands_Swords2, Mistlands_Swords3 bsrc=data
+# Mistlands | Location | Viaduct | Viaduct | Viaduct |    # Mistlands_Viaduct1, Mistlands_Viaduct2 bsrc=data
+# Mountain | Location | DrakeNest | Drake Nest | DrakeNest |    # DrakeNest01 bsrc=data
+# Meadows | Location | HildirsCamp | Hildir's Camp | HildirsCamp |    # Hildir_camp, Hildir_cave, Hildir_plainsfortress bsrc=author
+# Mountain | Location | LogCabin | Log Cabin | LogCabin |    # AbandonedLogCabin02, AbandonedLogCabin03, AbandonedLogCabin04 bsrc=data
+# Mountain | Location | Lorestone | Lorestone | Lorestone |    # DrakeLorestone bsrc=data
+# Mountain | Location | ModerAltar | Moder Altar | ModerAltar |    # Dragonqueen bsrc=data
+Mountain | Location | MountainCave | Mountain Cave | Cave |    # MountainCave02 bsrc=data
+# Mountain | Location | TowerRuin | Tower Ruin | TowerRuin |    # StoneTowerRuins03, StoneTowerRuins04, StoneTowerRuins05, StoneTowerRuins07, StoneTowerRuins08, StoneTowerRuins09, StoneTowerRuins10 bsrc=data
+# Mountain | Location | Waymarker | Waymarker | Waymarker |    # Waymarker01, Waymarker02 bsrc=data
+Plains | Location | FulingCamp | Fuling Camp | Camp |    # GoblinCamp2 bsrc=data
+Plains | Location | StoneHenge | Stone Henge | Henge |    # StoneHenge1, StoneHenge2, StoneHenge3, StoneHenge4, StoneHenge5, StoneHenge6 bsrc=data
+# Plains | Location | StoneHouse | Stone House | StoneHouse |    # StoneHouse1_heath, StoneHouse2_heath, StoneHouse3, StoneHouse4, StoneHouse5_heath bsrc=data
+# Plains | Location | StoneTower | Stone Tower | StoneTower |    # StoneTower1, StoneTower3 bsrc=data
+Plains | Location | TarPit | Tar Pit | Tar |    # TarPit1, TarPit2, TarPit3 bsrc=data
+# Plains | Location | YagluthAltar | Yagluth Altar | YagluthAltar |    # GoblinKing bsrc=data
+# Swamp | Location | BogWitchsCamp | Bog Witch's Camp | BogWitchsCamp |    # BogWitch_Camp bsrc=data
+# Swamp | Location | BonemassAltar | Bonemass Altar | BonemassAltar |    # Bonemass bsrc=data
+Swamp | Location | FireHole | Fire Hole | Fire |    # FireHole bsrc=data
+# Swamp | Location | Grave | Grave | Grave |    # Grave1, MountainGrave01 bsrc=data
+# Swamp | Location | InfestedTree | Infested Tree | InfestedTree |    # InfestedTree01 bsrc=data
+Meadows | Location | Shipwreck | Shipwreck | Wreck |    # ShipWreck01, ShipWreck02, ShipWreck03, ShipWreck04 bsrc=author
+Swamp | Location | SunkenCrypt | Sunken Crypt | Crypt |    # SunkenCrypt4 bsrc=data
+# Swamp | Location | SwampHut | Swamp Hut | SwampHut |    # SwampHut1, SwampHut2, SwampHut3, SwampHut4, SwampHut5 bsrc=data
+# Swamp | Location | SwampRuin | Swamp Ruin | SwampRuin |    # SwampRuin1, SwampRuin2 bsrc=data
+Swamp | Location | Well | Well | Well |    # MountainWell1, SwampWell1 bsrc=data
+
+# Added for the Deep North release (see the note in the Creature section). Location rows
+# ship commented out because the mod has no curated display name for these sites, so the
+# Display below falls back to the raw prefab name — uncomment the ones you want pinned,
+# and edit the Display and Abbr to whatever you want the pin to read.
+# BlackForest | Location | BearCave | BearCave | BearCave |    # BearCave bsrc=data
+# DeepNorth | Location | DNBossroom | DN_Bossroom | DNBossroom |    # DN_Bossroom bsrc=data
+# DeepNorth | Location | DNgammeltrollFrac01 | DN_gammeltrollFrac01 | DNGammeltrollFrac01 |    # DN_gammeltrollFrac01 bsrc=data
+# DeepNorth | Location | DNgammeltrollFrac02 | DN_gammeltrollFrac02 | DNGammeltrollFrac02 |    # DN_gammeltrollFrac02 bsrc=data
+# DeepNorth | Location | DNhut01 | DN_hut01 | DNHut01 |    # DN_hut01 bsrc=data
+# DeepNorth | Location | FrozenShip01DN | FrozenShip01_DN | FrozenShip01DN |    # FrozenShip01_DN bsrc=data
+# DeepNorth | Location | FrozenShip02DN | FrozenShip02_DN | FrozenShip02DN |    # FrozenShip02_DN bsrc=data
+# DeepNorth | Location | FrozenShip03DN | FrozenShip03_DN | FrozenShip03DN |    # FrozenShip03_DN bsrc=data
+# DeepNorth | Location | IcePond1 | IcePond1 | IcePond1 |    # IcePond1 bsrc=data
+# DeepNorth | Location | LumberCamp | LumberCamp | LumberCamp |    # LumberCamp bsrc=data
+# DeepNorth | Location | MorkBorg | MorkBorg | MorkBorg |    # MorkBorg bsrc=data
+# DeepNorth | Location | NorthMemorialPlace | NorthMemorialPlace | NorthMemorialPlace |    # NorthMemorialPlace bsrc=data
+# DeepNorth | Location | NorthVillage | NorthVillage | NorthVillage |    # NorthVillage bsrc=data
+# DeepNorth | Location | TheHole01 | TheHole01 | TheHole01 |    # TheHole01 bsrc=data
+# Mountain | Location | AncientUpgradeStation | AncientUpgradeStation | AncientUpgradeStation |    # AncientUpgradeStation bsrc=data
+# Plains | Location | GoblinHut01 | GoblinHut01 | GoblinHut01 |    # GoblinHut01 bsrc=data
+# Plains | Location | GoblinHut02 | GoblinHut02 | GoblinHut02 |    # GoblinHut02 bsrc=data
+# Plains | Location | GoblinHut03 | GoblinHut03 | GoblinHut03 |    # GoblinHut03 bsrc=data
+
+# ── Tree ──────────────────────────────────────────
+# AshLands | Tree | Branch | Branch | Branch | Blackwood   # AshlandsBranch2 bsrc=data type=Tree tier=0 pick=Normal chop=Normal
+# AshLands | Tree | Log | Log | Log | Blackwood   # AshlandsBranch1, AshlandsBranch3, FirTree_oldLog bsrc=data type=Tree tier=0 pick=Normal chop=Normal
+# AshLands | Tree | ScorchedTree | Scorched Tree | ScorchedTree | Blackwood   # AshlandsTree1, AshlandsTree3, AshlandsTree4, AshlandsTree5, AshlandsTree6, AshlandsTree6_big bsrc=data type=Tree(TreeBase) health=200
+# AshLands | Tree | Stump | Stump | Stump | Blackwood   # AshlandsTreeStump1, AshlandsTreeStump2, AshlandsTreeStump3, Beech_Stub, BirchStub, FirTree_Stub, OakStub, Pinetree_01_Stub, ShootStump, SwampTree1_Stub bsrc=name type=Tree tier=0 pick=Normal chop=Normal
+AshLands | Tree | UnstableLavaRock | Unstable Lava Rock | UnstableLavaRock | ProustitePowder   # UnstableLavaRock bsrc=data type=Default tier=0 pick=Weak chop=Resistant
+# BlackForest | Tree | AncientCoffin | Ancient Coffin | AncientCoffin |    # crypt_skeleton_chest bsrc=name type=Default tier=0 pick=Normal chop=Normal
+# BlackForest | Tree | Fir | Fir | Fir | Wood   # FirTree, FirTree_small, FirTree_small_dead bsrc=data type=Tree(TreeBase) health=80
+# BlackForest | Tree | Pine | Pine | Pine | RoundLog   # Pinetree_01 bsrc=data type=Tree(TreeBase) health=120
+# General | Tree | FenrisHair | Fenris Hair | FenrisHair | WolfHairBundle   # fenrirhide_hanging bsrc=none type=Default tier=0 pick=Resistant chop=Normal
+Swamp | Tree | GuckSack | Guck Sack | GuckSack | Guck   # GuckSack, GuckSack_small bsrc=author type=Default tier=0 pick=Normal chop=Normal
+# Meadows | Tree | Beech | Beech | Beech | Wood   # Beech1, Beech_small1, Beech_small2 bsrc=data type=Tree tier=0 pick=Normal chop=Normal
+# Meadows | Tree | Birch | Birch | Birch | FineWood   # Birch1, Birch1_aut, Birch2, Birch2_aut bsrc=data type=Tree(TreeBase) health=80
+# Meadows | Tree | Oak | Oak | Oak | FineWood   # Oak1 bsrc=data type=Tree(TreeBase) health=200
+# Mistlands | Tree | YggdrasilShoot | Yggdrasil Shoot | YggdrasilShoot | Wood   # YggaShoot1, YggaShoot2, YggaShoot3, YggaShoot_small1 bsrc=data type=Tree tier=4 pick=Normal chop=Normal
+# Swamp | Tree | AncientTree | Ancient Tree | AncientTree | ElderBark   # SwampTree1 bsrc=data type=Tree(TreeBase) health=80
+
+# Added for the Deep North release (see the note in the Creature section). Tree rows
+# always ship commented out — dense growth would bury the map in pins.
+# BlackForest | Tree | LargeBone | Large Bone | LargeBone | BoneFragments   # Greydwarf_Surprise, LargeBone, LargeBone_half01, LargeBone_half02 bsrc=data type=Default tier=0 pick=Normal chop=Normal
+# DeepNorth | Tree | TimberTree | Timber Tree | TimberTree | FirCone   # FirTree_big, Pinetree_Snow, Pinetree_Snow_dead, SnowFirTree, SnowFirTree 2 bsrc=data type=Tree(TreeBase) health=200
+# General | Tree | AncestralMemorial | Ancestral Memorial | AncestralMemorial | Stone   # MemorialStone_Medium, MemorialStone_Small bsrc=none type=Default tier=0 pick=Normal chop=Normal
+# General | Tree | PileofRubble | Pile of Rubble | PileOfRubble | Frostwood   # elaking_trashpile bsrc=none type=Default tier=0 pick=Normal chop=Normal
+# General | Tree | WardrobeShaft | Wardrobe Shaft | WardrobeShaft | Frostwood   # Spawner_Hole_double bsrc=none type=Default tier=0 pick=Weak chop=Normal
+# Mountain | Tree | MaliciousIce | Malicious Ice | MaliciousIce |    # BlackIce_Core_outer, BlackIce_Start bsrc=name type=Default tier=0 pick=Weak chop=Weak
+

@@ -1,0 +1,8 @@
+[Unit]
+Description=home-server vzdump of the Valheim guest to USB stick
+RequiresMountsFor=/mnt/backup
+[Service]
+Type=oneshot
+ExecStart=/srv/dev/repos/valheim-server/backups/vzdump-valheim.sh
+Nice=10
+IOSchedulingClass=idle

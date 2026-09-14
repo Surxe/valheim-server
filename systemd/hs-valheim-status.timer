@@ -1,0 +1,13 @@
+[Unit]
+Description=Valheim server-status heartbeat to Discord (daily liveness + re-baseline)
+
+[Timer]
+# Once a day. Up/down changes are handled promptly by hs-valheim-status-edge.timer; this
+# is just a daily "yes, still here + current players" liveness post that also re-baselines
+# the edge state file. (Was hourly; hourly heartbeats were pure noise once edge exists.)
+OnCalendar=*-*-* 09:07
+Persistent=true
+RandomizedDelaySec=60
+
+[Install]
+WantedBy=timers.target

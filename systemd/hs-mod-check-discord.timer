@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily Valheim mod-update check (Discord on change)
+
+[Timer]
+# Offset from the email check (09:00) so the two don't hit Thunderstore at once.
+OnCalendar=*-*-* 09:05
+Persistent=true
+RandomizedDelaySec=1800
+
+[Install]
+WantedBy=timers.target

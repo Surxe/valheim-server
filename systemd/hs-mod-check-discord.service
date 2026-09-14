@@ -1,0 +1,14 @@
+[Unit]
+Description=home-server: Valheim mod-update check + Discord alert on change
+Documentation=file:///srv/dev/repos/valheim-server/valheim/notify-mod-updates-discord.sh
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Posts to the #valheim-server-status channel (same webhook as hs-valheim-status and
+# hs-mod-list). Leading '-' makes it optional so the timer doesn't hard-fail before the
+# webhook is staged; the script then logs "DISCORD_WEBHOOK_URL not set" instead of posting.
+EnvironmentFile=-/etc/home-server/discord-server-status.env
+ExecStart=/srv/dev/repos/valheim-server/valheim/notify-mod-updates-discord.sh
+Nice=10

@@ -1,0 +1,8 @@
+[Unit]
+Description=Every-other-day Valheim world B2 backup
+[Timer]
+OnCalendar=*-*-01/2 12:30:00
+Persistent=true
+RandomizedDelaySec=600
+[Install]
+WantedBy=timers.target

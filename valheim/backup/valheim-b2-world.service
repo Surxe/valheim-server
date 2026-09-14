@@ -1,0 +1,10 @@
+[Unit]
+Description=Valheim world offsite backup to Backblaze B2 (restic)
+After=docker.service network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+Environment=HOME=/root
+ExecStart=/srv/valheim/restic-b2-world.sh
+Nice=10
+IOSchedulingClass=idle
