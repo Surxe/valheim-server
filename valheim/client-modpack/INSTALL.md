@@ -18,16 +18,18 @@ join (or if you clear the saved entry).
 | Mod | Version | Thunderstore package | Install? |
 |---|---|---|---|
 | BepInEx pack | 5.4.2350 | denikson / BepInExPack_Valheim | ✅ dependency |
+| ConditionalConfigSync | 1.0.9 | shudnal / ConditionalConfigSync | ✅ dependency (HarpoonExtended) |
 | ModSentry | 1.0.19 | Landoria / ModSentry | ✅ required |
 | Drop That | 3.1.5 | ASharpPen / Drop_That | ✅ required |
-| Jotunn (library) | 2.30.0 | ValheimModding / Jotunn | ✅ required |
+| Jotunn (library) | 2.30.2 | ValheimModding / Jotunn | ✅ required |
 | BetterCarts | 1.1.1 | TastyChickenLegs / BetterCarts | ✅ required |
 | OneMapToRuleThemAll | 2.8.1 | DrummerCraig / OneMapToRuleThemAll | ✅ required |
-| GlassPieces | 1.2.7 | blacks7ar / GlassPieces | ✅ required |
+| GlassPieces | 1.2.8 | blacks7ar / GlassPieces | ✅ required |
+| HarpoonExtended | 1.2.0 | shudnal / HarpoonExtended | ✅ required |
 | FarmGrid | 1.0.0 | Galateam / FarmGrid | ➖ optional |
 | FirstPersonMode | 1.3.12 | Azumatt / FirstPersonMode | ➖ optional |
 | FavoriteItems | 1.2.0 | ronaldoniz / FavoriteItems | ➖ optional |
-| Unshamed | 1.0.4 | Azumatt / Unshamed | ➖ optional (achievements) |
+| Unshamed | 1.0.5 | Azumatt / Unshamed | ➖ optional (achievements) |
 
 **Install?** ✅ required = you're kicked without it. ➖ optional = client-side preference,
 install it or not, either way you can join. The authoritative manifest the server enforces is
@@ -55,7 +57,8 @@ Cross-platform, handles BepInEx for you, and pulls the exact files (so hashes ma
 2. Create a new profile, e.g. `BaldurianQuat`.
 3. Install each ✅/➖ package above **at the exact version listed** (use the package's
    *Versions* tab if it defaults to a newer one). Installing Jotunn and Drop That will
-   offer BepInEx as a dependency — accept it (5.4.2350).
+   offer BepInEx as a dependency — accept it (5.4.2350). Installing HarpoonExtended will
+   offer ConditionalConfigSync — accept it (1.0.9); it installs both of that package's DLLs.
 4. Launch **Start Modded** once, load any world, then quit (lets the mods initialize).
 5. Launch modded → Join Game → **Join by code** → enter the code → enter the password
    (code + password shared separately).
@@ -74,7 +77,8 @@ Use this if you already have BepInEx set up, or prefer manual.
    (…/steamapps/common/Valheim). Launch once so BepInEx generates its folders, then quit.
 2. For each ✅/➖ mod in the table above, open its Thunderstore page, switch to the exact
    **version listed**, and download the zip. Extract its `.dll` into your game's
-   `…/Valheim/BepInEx/plugins/` folder.
+   `…/Valheim/BepInEx/plugins/` folder. (ConditionalConfigSync's zip holds **two** DLLs —
+   `ConditionalConfigSync.dll` and `ConditionalConfigSync.Plugin.dll` — extract **both**.)
 3. Launch the game once, then quit.
 4. Join: Join by code → enter the code → enter the password (both shared separately).
 

@@ -56,13 +56,31 @@
 # On 1.0 it pegs all game threads on world start and (on the old 3-core VM) starved the
 # guest agent, requiring a hard reset. Enable it briefly to dump prefab ids, grab the
 # files from BepInEx/Debug/, then set it back to false. (Jotunn 2.30.0 itself is fine.)
+#
+# 2026-09-21: version bumps + new mod. Bumped Jotunn 2.30.0 -> 2.30.2 (2.30.1 + 2.30.2 are
+# post-1.0 refinements on the 2.30.0 1.0.7 rebuild: custom build-menu categories, Deep North
+# asset-mock fix; 2.30.1's Thunderstore zip stores backslash paths so mod-fetch.sh's unzip
+# aborts under set -e — DLL was extracted with python, see the Jotunn line). Bumped Unshamed
+# 1.0.4 -> 1.0.5 (guide-text + explorer east/west fixes only) and GlassPieces 1.2.7 -> 1.2.8
+# (audio fix; this is also the first live apply of GlassPieces since re-enable — 1.2.7 was
+# staged 2026-09-13 but never restarted). ADDED HarpoonExtended 1.2.0 (+ its hard dep
+# ConditionalConfigSync 1.0.9). LOAD-TEST 2026-09-21: applied + restarted on VM 100, verify-boot
+# CLEAN — Jotunn 2.30.2, GlassPieces 1.2.8, Conditional Config Sync 1.0.9 and Harpoon Extended 1.2.0
+# all emit their Loading line with zero TypeLoad/Method/Field/dependency errors; Unshamed 1.0.5
+# load-tested clean server-side under a temporary `plugin` role, then reverted to optional. Also
+# fixed stage-mods.sh + mod-fetch.sh to tolerate Thunderstore zips with Windows backslash paths
+# (Jotunn's zip) instead of aborting under set -e.
 # ============================================================================
 # ModSentry (Landoria): validates required/optional client mods. Bumped 1.0.17 -> 1.0.18 on
 # 2026-09-12 ("Migration to Valheim 1.0.x"); bumped 1.0.18 -> 1.0.19 on 2026-09-13 (auto-creates
 # the ModSentry_Required/ModSentry_Optional folders at startup). Deps: BepInEx only.
 ModSentry|1.0.19|Landoria.ModSentry.dll|e192482202f447d6ff81b13965f1f12c5f92cd068bdbf5f264d994c85156525a|plugin+required|https://thunderstore.io/package/download/Landoria/ModSentry/1.0.19/
 Drop_That|3.1.5|Valheim.DropThat.dll|9b4c1718932f48eb2d1fe8e50973dccb53e9947bc5f9903b87d3da05ab5efaf4|plugin+required|https://thunderstore.io/package/download/ASharpPen/Drop_That/3.1.5/
-Jotunn|2.30.0|Jotunn.dll|51d32cfbe2db5c203ffb8855c155d185d572dda72db49066905679d8ec5e3c46|plugin+required|https://thunderstore.io/package/download/ValheimModding/Jotunn/2.30.0/
+# Jotunn (ValheimModding): the modding library most of our set builds on. Bumped 2.30.0 ->
+# 2.30.2 on 2026-09-21. NOTE: 2.30.2's Thunderstore zip stores paths with backslashes
+# (plugins\Jotunn.dll), so `unzip` warns + exits 1 and mod-fetch.sh aborts under set -e; the
+# DLL was extracted with python zipfile and its SHA pinned below. Deps: BepInEx only.
+Jotunn|2.30.2|Jotunn.dll|9509221046842a70f94b98bab4cb41005dee026823a7a79345829ed46a30f796|plugin+required|https://thunderstore.io/package/download/ValheimModding/Jotunn/2.30.2/
 FarmGrid|1.0.0|FarmGrid.dll|35f77dd50625c30cc4fe20d49ea1fbd7e05f76a64c97eb0588cecba827916519|optional|https://thunderstore.io/package/download/Galateam/FarmGrid/1.0.0/
 # FirstPersonMode (Azumatt): moves the camera into the player's head for a first-person view
 # (per-player preference — hides/shrinks the head via its own config). Client-side visual mod,
@@ -88,10 +106,11 @@ FavoriteItems|1.2.0|FavoriteItems.dll|acc41c9304952623c2024700245d3b723c25272f1f
 # unlike the vanilla `yesiuseddevcommandsbutiwantmyachievementsanyway` command). CLIENT-SIDE ONLY: no
 # ServerSync, nothing runs server-side, config is per-client (not server-synced) — so the server-side
 # load test is low value (real gate = a client smoke test). optional: each friend who wants achievements
-# installs it (ModSentry allows-but-doesn't-require). Deps only BepInEx. Added 2026-09-13, v1.0.4.
-# Per-client config (Azumatt.Unshamed.cfg): set `Enable Retroactive = true` to grant already-earned
-# achievements once on next load (default off). See client-modpack/INSTALL.md.
-Unshamed|1.0.4|Unshamed.dll|c7a58666fa8c1efbfdea6e17e6b0ceee64baec0b823eeaf09249fa1bfaba3a1e|optional|https://thunderstore.io/package/download/Azumatt/Unshamed/1.0.4/
+# installs it (ModSentry allows-but-doesn't-require). Deps only BepInEx. Added 2026-09-13 (v1.0.4);
+# bumped 1.0.4 -> 1.0.5 on 2026-09-21 (achievement-guide text fixes + explorer east/west swap fix;
+# no API/behaviour change). Per-client config (Azumatt.Unshamed.cfg): set `Enable Retroactive = true`
+# to grant already-earned achievements once on next load (default off). See client-modpack/INSTALL.md.
+Unshamed|1.0.5|Unshamed.dll|04364a22cb07ce9ad5e665adebce8b357cd17b0d04753466f5a914442f31a821|optional|https://thunderstore.io/package/download/Azumatt/Unshamed/1.0.5/
 # BetterCarts (TastyChickenLegs): quick attach/detach, up to 4 players push, tunable cart
 # weight/damage. Bumped 1.1.0 -> 1.1.1 on 2026-09-10 (latest Thunderstore release) and tested
 # on 1.0: loads CLEAN (Loading [BetterCarts 1.1.1]; its server ConfigSync RPC registers, no
@@ -111,12 +130,32 @@ OneMapToRuleThemAll|2.8.1|OneMapToRuleThemAll.dll|5537a49ea56f682d4d64b1e6d8f5b3
 # double-entry material in one recipe. Uses ServerSync + registers prefabs (PiecePrefabManager /
 # ZNetScene) and checks IsServer, so it must load server-side AND every client must match:
 # plugin+required (the pre-1.0 disabled line's `required`-only role was incomplete for a content mod).
-# Deps only BepInEx. Bumped 1.2.5 -> 1.2.7.
-# ***LOAD-TEST PENDING*** — was a hard TypeLoadException on 1.0; must verify a CLEAN boot
-# (verify-boot.sh --mod GlassPieces) before shipping. Gated on Ethan's all-clear (no restart yet).
-# cfg: per v1.2.7 changelog, DELETE the stale /config/bepinex/blacks7ar.GlassPieces.cfg on the VM at
-# apply time so the recipe fix takes effect (it regenerates on boot).
-GlassPieces|1.2.7|GlassPieces.dll|5bd47abe93b69ff291f4c76809b4c54cbd88d72bbae9fe177f33fbd1e41063ba|plugin+required|https://thunderstore.io/package/download/blacks7ar/GlassPieces/1.2.7/
+# Deps only BepInEx. Bumped 1.2.5 -> 1.2.7 (2026-09-13) -> 1.2.8 (2026-09-21, audio fix). The 1.2.7
+# re-enable was staged but never restarted (gated on Ethan), so 2026-09-21 is GlassPieces' first live
+# apply since it was disabled pre-1.0 — and it LOADS CLEAN on 1.0 (Loading [GlassPieces 1.2.8], no
+# TypeLoadException/VTable error; the pre-1.0 blocker is gone).
+# cfg: per the v1.2.7 changelog, DELETE the stale /config/bepinex/blacks7ar.GlassPieces.cfg on the VM
+# at apply time so the recipe fix takes effect (it regenerates on boot).
+GlassPieces|1.2.8|GlassPieces.dll|83da4469bc2c52c8276e188f3afa03356ebe446946b4f4c3d3d9af4e4930c6d5|plugin+required|https://thunderstore.io/package/download/blacks7ar/GlassPieces/1.2.8/
+# ConditionalConfigSync (shudnal): standalone shared config-sync + server-policy library, the
+# modern replacement for the old bundled ServerSync. Added 2026-09-21 as the HARD DEPENDENCY of
+# HarpoonExtended (Harpoon 1.2.0 switched to it and refuses to run without a compatible copy on
+# server + client). Deps only BepInEx. Harpoon needs >=1.0.5; pinned at latest 1.0.9. It runs
+# server-side (distributes config + enforces version handshake) AND every client that runs a mod
+# consuming it must match -> plugin+required. TWO DLLs: the package ships both the library
+# (ConditionalConfigSync.dll) AND the BepInEx entrypoint (ConditionalConfigSync.Plugin.dll,
+# GUID _shudnal.ConditionalConfigSync) — BOTH must be staged, or the plugin never registers and
+# Harpoon fails with "missing dependencies: _shudnal.ConditionalConfigSync". One manifest line per
+# DLL (the format is one SHA-pinned DLL per line); both come from the same package zip/url.
+ConditionalConfigSync|1.0.9|ConditionalConfigSync.dll|29fb07271c4f58f3f22c5b0d6db8aa13445b94abd3a92ee46c280283ca2b87a9|plugin+required|https://thunderstore.io/package/download/shudnal/ConditionalConfigSync/1.0.9/
+ConditionalConfigSync.Plugin|1.0.9|ConditionalConfigSync.Plugin.dll|537d7185dc3d00b5715a9f9f09727fc15884a4f01c0700bbc661f0045fafde2a|plugin+required|https://thunderstore.io/package/download/shudnal/ConditionalConfigSync/1.0.9/
+# HarpoonExtended (shudnal): overhauled harpoon — pull movable targets toward you or pull yourself
+# to fixed targets, retract/cast the line, configurable damage/durability/stamina/distances +
+# Feather Fall while harpooning. Added 2026-09-21, v1.2.0 ("Updated for Valheim 1.0.15", listed under
+# the Deep North Update category on Thunderstore -> 1.0-ready). Depends on BepInEx + shudnal's
+# ConditionalConfigSync (see the line above). Its 1.2.0 changelog: "the mod is now required on the
+# server and clients" -> plugin+required (loads server-side, every client must match the hash).
+HarpoonExtended|1.2.0|HarpoonExtended.dll|09357fd57767cd49ca2d6c462c65de1bb4ee2beaa1dc69dd638154661c3cbf1a|plugin+required|https://thunderstore.io/package/download/shudnal/HarpoonExtended/1.2.0/
 # --- DISABLED until each ships a Valheim 1.0 build (see note above) ---
 # (role shown = intended role once 1.0-ready.)
 # Huginn_Map|1.0.5|Huginn.dll|1108fec508f9096efbb73aa032ba72502cc92eefe7829bd614587fd4395fcfcd|plugin+required|https://thunderstore.io/package/download/NightOfGames/Huginn_Map/1.0.5/

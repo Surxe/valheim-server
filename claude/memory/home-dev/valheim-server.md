@@ -19,8 +19,9 @@ pipe through python3 for `out-data`). World + config bind-mounted at `/srv/valhe
 `hooks/sync-plugins.sh` (PRE_SERVER_RUN_HOOK so auto-updates keep mods loaded).
 
 **State (2026-09): on Valheim 1.0 (l-1.0.7, Unity 6).** Server plugins: **ModSentry 1.0.19 +
-DropThat 3.1.5 + Jotunn 2.30.0 + BetterCarts 1.1.1 + OneMapToRuleThemAll 2.8.1 + GlassPieces 1.2.7**
-(Jotunn/DropThat on their 1.0 builds; Jotunn 2.30.0 no longer crashes on connect). Bumped 2026-09-12: ModSentry
+DropThat 3.1.5 + Jotunn 2.30.2 + BetterCarts 1.1.1 + OneMapToRuleThemAll 2.8.1 + GlassPieces 1.2.8 +
+ConditionalConfigSync 1.0.9 + HarpoonExtended 1.2.0**
+(Jotunn/DropThat on their 1.0 builds; Jotunn no longer crashes on connect). Bumped 2026-09-12: ModSentry
 1.0.17 -> 1.0.18 (Valheim 1.0 migration), OneMapToRuleThemAll 2.8.0 -> 2.8.1 (fixes .explored
 file pathing on the new 1.0 save format), FavoriteItems 1.1.0 -> 1.2.0 (optional ExtraSlots
 special-slot protection, off by default).
@@ -37,7 +38,21 @@ mod (ModSentry_Optional) — re-enables Steam achievements for players on our mo
 `s_bypassCheatChecks` bypass, so spawned items stay flagged as normal). CLIENT-SIDE ONLY (no ServerSync,
 nothing server-side): its `Azumatt.Unshamed.cfg` is per-client, NOT server-synced — can't be set server-side.
 Per-client config `Enable Retroactive = true` grants already-earned achievements once; documented in
-`client-modpack/INSTALL.md`. Steam-only (Xbox/Game Pass have their own achievement system). See [[valheim-add-mod]]. **BetterCarts** (TastyChickenLegs;
+`client-modpack/INSTALL.md`. Steam-only (Xbox/Game Pass have their own achievement system). See [[valheim-add-mod]].
+**Bumped/added 2026-09-21:** Jotunn 2.30.0 -> **2.30.2**, GlassPieces 1.2.7 -> **1.2.8** (audio fix;
+also its FIRST live apply since the 2026-09-13 re-enable was staged-but-never-restarted — loads CLEAN
+now), Unshamed 1.0.4 -> **1.0.5** (guide-text/explorer fixes). **HarpoonExtended 1.2.0 (shudnal) ADDED**
+as `plugin+required` — pull movable targets to you / yourself to fixed targets, configurable damage/
+distances + Feather Fall; confirmed 1.0/Deep North ready (changelog "Updated for Valheim 1.0.15"). Its
+HARD DEP **ConditionalConfigSync 1.0.9 (shudnal)** added too (`plugin+required`), the standalone
+ServerSync replacement Harpoon 1.2.0 switched to. GOTCHA: CCS ships **TWO** DLLs — the library
+`ConditionalConfigSync.dll` AND the BepInEx entrypoint `ConditionalConfigSync.Plugin.dll` (GUID
+`_shudnal.ConditionalConfigSync`) — BOTH must be staged (one manifest line each) or Harpoon dies with
+"missing dependencies: _shudnal.ConditionalConfigSync" (hit this on the first boot). All verify-boot CLEAN.
+TOOLING FIX: Jotunn 2.30.2's Thunderstore zip stores Windows backslash paths (`plugins\Jotunn.dll`), so
+`unzip` warns + exits 1 and aborted `stage-mods.sh`/`mod-fetch.sh` under `set -e`; both now tolerate rc<=1
+and find the DLL by basename regardless of `/`-or-`\` separator (stage-mods also compares the sha directly,
+since `sha256sum -c` escapes backslash filenames). See [[valheim-add-mod]]. **BetterCarts** (TastyChickenLegs;
 quick attach/detach, multi-player push, tunable cart weight/damage) `plugin+required`, deps only
 BepInEx. Bumped 1.1.0 -> **1.1.1** on 2026-09-10 (latest release) — tested to load CLEAN on 1.0
 (Harmony patches bind, its server ConfigSync RPC registers, no TypeLoad/MissingMethod). Its config

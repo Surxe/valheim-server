@@ -39,11 +39,26 @@ resolve_dll() {  # sets DLLPATH for name/dll/sha/url; verifies sha256
   else
     local zip="${CACHE}/${name}.zip"
     [ -f "$zip" ] || curl -sSL -o "$zip" "$url"
-    local ex="${CACHE}/${name}"; rm -rf "$ex"; mkdir -p "$ex"; unzip -oq "$zip" -d "$ex"
-    DLLPATH="$(find "$ex" -type f -name "$dll" | head -1)"
+    local ex="${CACHE}/${name}"; rm -rf "$ex"; mkdir -p "$ex"
+    # unzip returns 1 for warnings — notably Thunderstore zips that store Windows
+    # backslash paths (e.g. `plugins\Foo.dll`, as Jotunn 2.30.1/2.30.2 do). That is not
+    # a failure (only rc>=2 is), but set -e would abort on it, so capture the code.
+    local urc=0; unzip -oq "$zip" -d "$ex" || urc=$?
+    [ "$urc" -le 1 ] || { echo "  unzip failed (rc=$urc) for $name"; exit 1; }
+    # Locate <dll> by basename, tolerating both / and \ separators: a backslash zip
+    # extracts on Linux as one literal file named e.g. `plugins\Foo.dll`, which
+    # `find -name Foo.dll` would never match.
+    DLLPATH=""
+    while IFS= read -r f; do
+      local b="${f##*/}"; b="${b##*\\}"
+      [ "$b" = "$dll" ] && { DLLPATH="$f"; break; }
+    done < <(find "$ex" -type f)
     [ -n "$DLLPATH" ] || { echo "  $dll not found in $url"; exit 1; }
   fi
-  echo "${sha}  ${DLLPATH}" | sha256sum -c - >/dev/null || { echo "  SHA MISMATCH: $dll"; exit 1; }
+  # Compare hashes directly rather than via `sha256sum -c` — a DLLPATH containing a
+  # backslash (from a backslash-path zip, above) trips sha256sum -c's filename escaping.
+  local got; got="$(sha256sum "$DLLPATH" | cut -d' ' -f1)"
+  [ "$got" = "$sha" ] || { echo "  SHA MISMATCH: $dll (want ${sha}, got ${got})"; exit 1; }
 }
 
 while IFS='|' read -r name version dll sha role url; do

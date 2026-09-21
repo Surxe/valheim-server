@@ -66,7 +66,12 @@ read -r RES_VERSION DLURL <<< "$INFO"
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 echo ">> downloading $DLURL" >&2
 curl -fsSL -o "$TMP/pkg.zip" "$DLURL"
-unzip -oq "$TMP/pkg.zip" -d "$TMP/ex"
+# unzip returns 1 for warnings — notably Thunderstore zips that store Windows backslash
+# paths (e.g. `plugins\Foo.dll`, as Jotunn 2.30.1/2.30.2 do); that is not a failure (only
+# rc>=2 is), but set -e would abort on it. Such a zip extracts on Linux as one literal file
+# named `plugins\Foo.dll`, so normalize '\' -> '/' before matching basenames below.
+urc=0; unzip -oq "$TMP/pkg.zip" -d "$TMP/ex" || urc=$?
+[ "$urc" -le 1 ] || { echo "unzip failed (rc=$urc)" >&2; exit 1; }
 
 # pick the DLL: the only one, else the one whose basename matches the package name
 mapfile -t DLLS < <(cd "$TMP/ex" && find . -name '*.dll' -printf '%P\n' | sort)
@@ -75,11 +80,11 @@ DLL=""
 if [ "${#DLLS[@]}" -eq 1 ]; then
   DLL="${DLLS[0]}"
 else
-  for d in "${DLLS[@]}"; do [[ "$(basename "$d" .dll)" == "$PKG" ]] && { DLL="$d"; break; }; done
+  for d in "${DLLS[@]}"; do [[ "$(basename "${d//\\//}" .dll)" == "$PKG" ]] && { DLL="$d"; break; }; done
   [ -n "$DLL" ] || { echo "multiple DLLs — copy the right one into dll/ by hand:" >&2
                      printf '  %s\n' "${DLLS[@]}" >&2; exit 1; }
 fi
-DLLBASE="$(basename "$DLL")"
+DLLBASE="$(basename "${DLL//\\//}")"
 SHA="$(sha256sum "$TMP/ex/$DLL" | cut -d' ' -f1)"
 
 CL="$(cd "$TMP/ex" && find . -iname 'CHANGELOG.md' | head -1 || true)"
