@@ -26,13 +26,23 @@ case "${1:-}" in --post) MODE="post";; "") ;; *) echo "unknown arg: $1" >&2; exi
 [ -f "$MANIFEST" ] || { echo "manifest not found: $MANIFEST" >&2; exit 1; }
 
 python3 - "$MODE" "$MANIFEST" <<'PY'
-import sys, os, json, urllib.request, urllib.error
+import sys, os, re, json, urllib.request, urllib.error
 
 mode, manifest = sys.argv[1], sys.argv[2]
+
+# Some Thunderstore packages ship MORE THAN ONE DLL (e.g. shudnal/ConditionalConfigSync
+# = ConditionalConfigSync.dll + ConditionalConfigSync.Plugin.dll), which the manifest must
+# list as one SHA-pinned line PER DLL. To a user that is still ONE mod — one Thunderstore
+# package, one thing to install — so collapse lines that share a package (namespace/name
+# from the download url) to the FIRST line for that package, and list it once.
+def pkg_key(url):
+    m = re.search(r"thunderstore\.io/package/download/([^/]+)/([^/]+)/", url or "")
+    return (m.group(1).lower(), m.group(2).lower()) if m else None
 
 # Parse ENABLED manifest lines: "name | version | dll | sha256 | role | url".
 # Skip comments (disabled mods) and any prose/non-data comment lines.
 required, optional, server_only = [], [], []
+seen = set()
 with open(manifest) as f:
     for raw in f:
         line = raw.strip()
@@ -42,6 +52,11 @@ with open(manifest) as f:
         if len(parts) < 6:
             continue
         name, version, role = parts[0], parts[1], parts[4].lower()
+        key = pkg_key(parts[5])
+        if key is not None:
+            if key in seen:
+                continue            # secondary DLL of a package already listed
+            seen.add(key)
         roles = role.split("+")
         entry = (name, version)
         if "required" in roles:

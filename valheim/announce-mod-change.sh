@@ -83,8 +83,16 @@ def role_label(role_field):
         return "optional"
     return "server-only"   # a bare "plugin" with no client policy
 
+def pkg_key(url):
+    # A Thunderstore package that ships several DLLs (e.g. shudnal/ConditionalConfigSync =
+    # ConditionalConfigSync.dll + .Plugin.dll) is one SHA-pinned manifest line PER DLL, but
+    # ONE mod to users. Key by the package (namespace/name) so we announce/count it once.
+    m = re.search(r"thunderstore\.io/package/download/([^/]+)/([^/]+)/", url or "")
+    return (m.group(1).lower(), m.group(2).lower()) if m else None
+
 # Current enabled set: name -> {"version":..., "role":...}
 current = {}
+seen = set()
 with open(manifest) as f:
     for raw in f:
         line = raw.strip()
@@ -93,6 +101,11 @@ with open(manifest) as f:
         parts = [p.strip() for p in line.split("|")]
         if len(parts) < 6:
             continue
+        key = pkg_key(parts[5])
+        if key is not None:
+            if key in seen:
+                continue            # secondary DLL of a package already listed
+            seen.add(key)
         name, version, role = parts[0], parts[1], role_label(parts[4])
         # Persist the Thunderstore page URL into the baseline too, so a later REMOVAL
         # (which only has the old baseline to go on) can still be hyperlinked.
