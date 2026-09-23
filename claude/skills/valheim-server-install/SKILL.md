@@ -27,7 +27,7 @@ of `home-server` on the Proxmox host); operate from the host as root/sudo.
   `~/.claude/skills`; memory into `~/.claude/projects/-<proj>/memory` and rendered to
   `~/.dsh/memory` for the DeepSeek Harness). A repo edit does NOT reach the live area until
   you re-install. NB: the per-project `MEMORY.md` index is SHARED with the home-server repo
-  via fragments — this repo owns `claude/memory/home-dev/MEMORY.md` (its section only).
+  via fragments — this repo owns `claude/memory/srv-dev/MEMORY.md` (its section only).
 - Host-run scripts a unit invokes in place (e.g. `valheim/notify-mod-updates.sh`,
   `valheim/server-status-discord.sh`, `backups/vzdump-valheim.sh`) — live immediately from
   the repo path, but still must be **tested**.

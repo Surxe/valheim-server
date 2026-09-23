@@ -1,7 +1,7 @@
 
 ## Valheim server (valheim-server repo)
 
-Installed from `valheim-server/claude/memory/home-dev/` (a sibling clone at
+Installed from `valheim-server/claude/memory/srv-dev/` (a sibling clone at
 `/srv/dev/repos/valheim-server`). These notes cover the modded Valheim dedicated server on
 VM 100; edit them there and run that repo's `install.sh`. One line per memory.
 
