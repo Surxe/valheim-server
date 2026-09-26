@@ -18,7 +18,7 @@ sudo qm guest exec 100 -- /bin/bash -lc 'docker exec valheim supervisorctl resta
 Then get the new join code (it rotates on every restart) once it's back up:
 
 ```
-sudo qm guest exec 100 -- /bin/bash -lc "grep 'is active with' /opt/valheim/bepinex/BepInEx/LogOutput.log | tail -1"
+sudo qm guest exec 100 -- /bin/bash -lc "docker exec valheim grep 'is active with' /opt/valheim/bepinex/BepInEx/LogOutput.log | tail -1"
 ```
 
 Notes:
