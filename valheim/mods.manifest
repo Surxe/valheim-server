@@ -156,6 +156,13 @@ ConditionalConfigSync.Plugin|1.0.9|ConditionalConfigSync.Plugin.dll|537d7185dc3d
 # ConditionalConfigSync (see the line above). Its 1.2.0 changelog: "the mod is now required on the
 # server and clients" -> plugin+required (loads server-side, every client must match the hash).
 HarpoonExtended|1.2.0|HarpoonExtended.dll|09357fd57767cd49ca2d6c462c65de1bb4ee2beaa1dc69dd638154661c3cbf1a|plugin+required|https://thunderstore.io/package/download/shudnal/HarpoonExtended/1.2.0/
+# BlastFurnaceTakesAll (TastyChickenLegs): the Blast Furnace also smelts copper/tin/iron/silver ore
+# and copper/iron/bronze scrap. Added 2026-09-29, v1.1.0 (a Mistlands-era build, pre-1.0; it's a
+# tiny Harmony postfix on Smelter.Awake that appends to m_conversion, so 1.0 shouldn't break it,
+# but the load test is the gate). Deps only BepInEx. BepInProcess(valheim.exe, valheim_server.exe),
+# so it does load server-side. Ore insertion is checked on the interacting client and smelting runs
+# on the furnace's ZDO owner (a nearby client), so every client needs it -> plugin+required.
+BlastFurnaceTakesAll|1.1.0|BlastFurnaceTakesAll.dll|1fa1b33aa6f6d340043cb5fb5385350f82cfe670780aeb434cee42ba02f0b027|plugin+required|https://thunderstore.io/package/download/TastyChickenLegs/BlastFurnaceTakesAll/1.1.0/
 # --- DISABLED until each ships a Valheim 1.0 build (see note above) ---
 # (role shown = intended role once 1.0-ready.)
 # Huginn_Map|1.0.5|Huginn.dll|1108fec508f9096efbb73aa032ba72502cc92eefe7829bd614587fd4395fcfcd|plugin+required|https://thunderstore.io/package/download/NightOfGames/Huginn_Map/1.0.5/
