@@ -26,6 +26,7 @@ join (or if you clear the saved entry).
 | OneMapToRuleThemAll | 2.8.1 | DrummerCraig / OneMapToRuleThemAll | ✅ required |
 | GlassPieces | 1.2.8 | blacks7ar / GlassPieces | ✅ required |
 | HarpoonExtended | 1.2.0 | shudnal / HarpoonExtended | ✅ required |
+| BlastFurnaceTakesAll | 1.1.0 | TastyChickenLegs / BlastFurnaceTakesAll | ✅ required |
 | FarmGrid | 1.0.0 | Galateam / FarmGrid | ➖ optional |
 | FirstPersonMode | 1.3.12 | Azumatt / FirstPersonMode | ➖ optional |
 | FavoriteItems | 1.2.0 | ronaldoniz / FavoriteItems | ➖ optional |
