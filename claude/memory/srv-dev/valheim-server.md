@@ -18,9 +18,9 @@ pipe through python3 for `out-data`). World + config bind-mounted at `/srv/valhe
 `stage-mods.sh` (deploy mods to the VM), `check-mod-updates.sh` (poll Thunderstore),
 `hooks/sync-plugins.sh` (PRE_SERVER_RUN_HOOK so auto-updates keep mods loaded).
 
-**State (2026-09): on Valheim 1.0 (l-1.0.7, Unity 6).** Server plugins: **ModSentry 1.0.19 +
-DropThat 3.1.5 + Jotunn 2.30.2 + BetterCarts 1.1.1 + OneMapToRuleThemAll 2.8.1 + GlassPieces 1.2.8 +
-ConditionalConfigSync 1.0.9 + HarpoonExtended 1.2.0 + BlastFurnaceTakesAll 1.1.0**
+**State (2026-10): on Valheim 1.0 (l-1.0.7, Unity 6), BepInExPack 5.4.2351.** Server plugins: **ModSentry 1.0.20 +
+DropThat 3.1.6 + Jotunn 2.30.2 + BetterCarts 1.1.1 + OneMapToRuleThemAll 2.8.1 + GlassPieces 1.2.8 +
+ConditionalConfigSync 1.0.10 + HarpoonExtended 1.2.1 + BlastFurnaceTakesAll 1.1.0**
 (Jotunn/DropThat on their 1.0 builds; Jotunn no longer crashes on connect). Bumped 2026-09-12: ModSentry
 1.0.17 -> 1.0.18 (Valheim 1.0 migration), OneMapToRuleThemAll 2.8.0 -> 2.8.1 (fixes .explored
 file pathing on the new 1.0 save format), FavoriteItems 1.1.0 -> 1.2.0 (optional ExtraSlots
@@ -53,6 +53,12 @@ ServerSync replacement Harpoon 1.2.0 switched to. GOTCHA: CCS ships **TWO** DLLs
 Furnace also smelts copper/tin/iron/silver ore + copper/iron/bronze scrap (Smelter.Awake postfix on
 `m_conversion`). Mistlands-era build but loads CLEAN on 1.0; logs as `BlastFurnaceTakesAll 1.0.9` (the
 author's BepInPlugin version, not a mismatch). Snapshot `pre_blastfurnace_20260929`.
+**Bumped 2026-10-04:** ModSentry 1.0.19 -> **1.0.20** (BepInEx 5.4.2351 rebuild), DropThat 3.1.5 -> **3.1.6**
+(fixes CharacterDrop tracking broken by 1.0), ConditionalConfigSync 1.0.9 -> **1.0.10** (soft-dep API; both
+DLLs re-pinned — mod-fetch.sh still only extracts the library DLL, pull `.Plugin` from the zip by hand),
+HarpoonExtended 1.2.0 -> **1.2.1** (player-targeting config). BepInExPack 5.4.2351 was already auto-installed
+by the lloesche image (its `bepinex-updater` always takes Thunderstore's latest) — only the
+`check-mod-updates.sh` pin needed bumping. verify-boot CLEAN. Snapshot `pre_modbump_20261004`.
 TOOLING FIX: Jotunn 2.30.2's Thunderstore zip stores Windows backslash paths (`plugins\Jotunn.dll`), so
 `unzip` warns + exits 1 and aborted `stage-mods.sh`/`mod-fetch.sh` under `set -e`; both now tolerate rc<=1
 and find the DLL by basename regardless of `/`-or-`\` separator (stage-mods also compares the sha directly,

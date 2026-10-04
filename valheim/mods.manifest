@@ -73,9 +73,12 @@
 # ============================================================================
 # ModSentry (Landoria): validates required/optional client mods. Bumped 1.0.17 -> 1.0.18 on
 # 2026-09-12 ("Migration to Valheim 1.0.x"); bumped 1.0.18 -> 1.0.19 on 2026-09-13 (auto-creates
-# the ModSentry_Required/ModSentry_Optional folders at startup). Deps: BepInEx only.
-ModSentry|1.0.19|Landoria.ModSentry.dll|e192482202f447d6ff81b13965f1f12c5f92cd068bdbf5f264d994c85156525a|plugin+required|https://thunderstore.io/package/download/Landoria/ModSentry/1.0.19/
-Drop_That|3.1.5|Valheim.DropThat.dll|9b4c1718932f48eb2d1fe8e50973dccb53e9947bc5f9903b87d3da05ab5efaf4|plugin+required|https://thunderstore.io/package/download/ASharpPen/Drop_That/3.1.5/
+# the ModSentry_Required/ModSentry_Optional folders at startup); bumped 1.0.19 -> 1.0.20 on
+# 2026-10-04 (rebuilt against BepInEx pack 5.4.2351, no functional change). Deps: BepInEx only.
+ModSentry|1.0.20|Landoria.ModSentry.dll|a2776c6b2a7641e2c06241502cf79598adf3185ad5ebe01260f14e24fa7e8de9|plugin+required|https://thunderstore.io/package/download/Landoria/ModSentry/1.0.20/
+# Drop That (ASharpPen): loot-table config. Bumped 3.1.5 -> 3.1.6 on 2026-10-04 (fixes CharacterDrop
+# tracking broken by Valheim 1.0 - autostacking/modifiers/drop limiters - and a skipped AmountLimit).
+Drop_That|3.1.6|Valheim.DropThat.dll|f20e41b20d8b8c065f803a779a1759752604e26084ffb345cc0360b220abfeb7|plugin+required|https://thunderstore.io/package/download/ASharpPen/Drop_That/3.1.6/
 # Jotunn (ValheimModding): the modding library most of our set builds on. Bumped 2.30.0 ->
 # 2.30.2 on 2026-09-21. NOTE: 2.30.2's Thunderstore zip stores paths with backslashes
 # (plugins\Jotunn.dll), so `unzip` warns + exits 1 and mod-fetch.sh aborts under set -e; the
@@ -147,15 +150,17 @@ GlassPieces|1.2.8|GlassPieces.dll|83da4469bc2c52c8276e188f3afa03356ebe446946b4f4
 # GUID _shudnal.ConditionalConfigSync) — BOTH must be staged, or the plugin never registers and
 # Harpoon fails with "missing dependencies: _shudnal.ConditionalConfigSync". One manifest line per
 # DLL (the format is one SHA-pinned DLL per line); both come from the same package zip/url.
-ConditionalConfigSync|1.0.9|ConditionalConfigSync.dll|29fb07271c4f58f3f22c5b0d6db8aa13445b94abd3a92ee46c280283ca2b87a9|plugin+required|https://thunderstore.io/package/download/shudnal/ConditionalConfigSync/1.0.9/
-ConditionalConfigSync.Plugin|1.0.9|ConditionalConfigSync.Plugin.dll|537d7185dc3d00b5715a9f9f09727fc15884a4f01c0700bbc661f0045fafde2a|plugin+required|https://thunderstore.io/package/download/shudnal/ConditionalConfigSync/1.0.9/
+# Bumped 1.0.9 -> 1.0.10 on 2026-10-04 (adds a soft-dependency API for mod authors; mod-fetch.sh
+# only extracts the library DLL, so the .Plugin DLL was pulled from the zip by hand again).
+ConditionalConfigSync|1.0.10|ConditionalConfigSync.dll|3f9cd0d2b80ab14d289f4621f25c11c84045919cbad8013955450cf6e662ef4e|plugin+required|https://thunderstore.io/package/download/shudnal/ConditionalConfigSync/1.0.10/
+ConditionalConfigSync.Plugin|1.0.10|ConditionalConfigSync.Plugin.dll|a9508884c9a2dc6e1cf1a4d0c64f996d54a738c17d42f0bce612d4a4efbaf2d5|plugin+required|https://thunderstore.io/package/download/shudnal/ConditionalConfigSync/1.0.10/
 # HarpoonExtended (shudnal): overhauled harpoon — pull movable targets toward you or pull yourself
 # to fixed targets, retract/cast the line, configurable damage/durability/stamina/distances +
 # Feather Fall while harpooning. Added 2026-09-21, v1.2.0 ("Updated for Valheim 1.0.15", listed under
 # the Deep North Update category on Thunderstore -> 1.0-ready). Depends on BepInEx + shudnal's
 # ConditionalConfigSync (see the line above). Its 1.2.0 changelog: "the mod is now required on the
 # server and clients" -> plugin+required (loads server-side, every client must match the hash).
-HarpoonExtended|1.2.0|HarpoonExtended.dll|09357fd57767cd49ca2d6c462c65de1bb4ee2beaa1dc69dd638154661c3cbf1a|plugin+required|https://thunderstore.io/package/download/shudnal/HarpoonExtended/1.2.0/
+HarpoonExtended|1.2.1|HarpoonExtended.dll|db3fb9d1ac715750445d3f9c6e795c6313513dc2e130a587d7f79823be62accb|plugin+required|https://thunderstore.io/package/download/shudnal/HarpoonExtended/1.2.1/
 # BlastFurnaceTakesAll (TastyChickenLegs): the Blast Furnace also smelts copper/tin/iron/silver ore
 # and copper/iron/bronze scrap. Added 2026-09-29, v1.1.0 (a Mistlands-era build, pre-1.0; it's a
 # tiny Harmony postfix on Smelter.Awake that appends to m_conversion, so 1.0 shouldn't break it,

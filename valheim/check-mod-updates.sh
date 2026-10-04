@@ -40,7 +40,7 @@ mode, ts, v10_date, api, logpath, manifest = sys.argv[1:7]
 #  - active mods come from mods.manifest urls: .../package/download/<ns>/<name>/<ver>/
 #  - DISABLED mods (commented-out data lines, e.g. Jotunn during the 1.0 wait) are ALSO
 #    polled — that is the whole point: we want to know the moment they ship a 1.0 build.
-mods = [("denikson", "BepInExPack_Valheim", "5.4.2350", False)]  # what the server runs (auto-updated for 1.0)
+mods = [("denikson", "BepInExPack_Valheim", "5.4.2351", False)]  # what the server runs (auto-updated for 1.0)
 with open(manifest) as f:
     for raw in f:
         line = raw.strip()
