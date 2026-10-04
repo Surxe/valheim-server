@@ -94,7 +94,8 @@ their current versions and NOT ok — need a real 1.0 rebuild, not just Jotunn):
 **GlassPieces 1.2.5** (still TypeLoadException/VTable on 1.0; depends only on BepInEx so Jotunn
 never applied) and **Huginn Map 1.0.5** (now *loads* under Jotunn but its own map-share
 `Minimap.ReadExploredArray` + boat `ZoneSystem.m_activeArea` calls hit 1.0-removed game APIs, so
-its headline features are broken). **Favorite_Items 0.1.5 (Valheazy) DROPPED 2026-09-12** —
+its headline features are broken). **Huginn Map DROPPED 2026-10-03** (Ethan: not wanted; OneMap
+covers the shared map) — its disabled manifest line was removed, so it's no longer polled. **Favorite_Items 0.1.5 (Valheazy) DROPPED 2026-09-12** —
 abandoned (last release 2026-02-23) and throws a TypeLoadException every FixedUpdate on 1.0
 (missing inventory-UI type `Element`); superseded by ronaldoniz/FavoriteItems (see above). A daily
 systemd job `hs-mod-check`

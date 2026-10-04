@@ -85,7 +85,7 @@ if ready:
     for m in ready:
         lines.append("  * %s %s" % (m["name"], m["latest"]))
     if any(m["name"].lower().startswith("jotunn") for m in ready):
-        lines.append("  Jotunn is ready -> the whole Jotunn stack (Jotunn/Huginn/FarmGrid) can likely come back.")
+        lines.append("  Jotunn is ready -> the whole Jotunn stack (Jotunn/FarmGrid) can likely come back.")
 
 lines += ["",
           "Checked at %s (UTC)." % data.get("checked_at", "?"),
