@@ -90,7 +90,7 @@ if ready:
     for m in ready:
         lines.append("• [%s](%s) %s" % (m["name"], ts_page(m), m["latest"]))
     if any(m["name"].lower().startswith("jotunn") for m in ready):
-        lines.append("Jotunn is ready → the whole Jotunn stack (Jotunn/Huginn/FarmGrid) can likely come back.")
+        lines.append("Jotunn is ready → the whole Jotunn stack (Jotunn/FarmGrid) can likely come back.")
 
 desc = "\n".join(lines)
 if len(desc) > 3900:            # Discord embed description hard-limit is 4096

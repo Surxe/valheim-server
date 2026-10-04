@@ -33,7 +33,7 @@
 #       Harmony / dependency errors). Jotunn was its only blocker. Client-side/optional.
 #       (Server-side load verified from the headless server; its build-placement grid
 #        overlay is a client UI feature and was not exercised on a real client.)
-#   * Huginn Map 1.0.5  -> STAYS DISABLED. It now LOADS ("Huginn active"), but its own
+#   * Huginn Map 1.0.5  -> STAYS DISABLED (>> DROPPED 2026-10-03, see below). It now LOADS ("Huginn active"), but its own
 #       code calls game internals that 1.0 removed/renamed, so its headline features are
 #       broken: shared map data fails (Method not found Minimap.ReadExploredArray) and
 #       boat tracking fails (Field not found ZoneSystem.m_activeArea). Jotunn being fixed
@@ -48,8 +48,8 @@
 # 2026-02-23) and broken on 1.0 (TypeLoadException: missing inventory-UI type 'Element').
 # Replaced by ronaldoniz/FavoriteItems (a different, actively-maintained 1.0 mod) - see below.
 #
-# Re-enable Huginn — un-comment, bump version+SHA, re-stage, update the client docs, restart —
-# once it ships a real 1.0 build. Track with ./check-mod-updates.sh. (GlassPieces done 2026-09-13.)
+# 2026-10-03: DROPPED Huginn Map entirely (Ethan: no longer wanted; OneMapToRuleThemAll covers
+# the shared map). Its disabled line was removed, so check-mod-updates.sh no longer polls it.
 # Disabled DLLs are preserved on the VM under /srv/valheim/config/_disabled_mods_20260909/.
 #
 # WARNING: do NOT leave DropThat's WriteDropTablesToFiles (drop_that.cfg [Debug]) enabled.
@@ -163,6 +163,3 @@ HarpoonExtended|1.2.0|HarpoonExtended.dll|09357fd57767cd49ca2d6c462c65de1bb4ee2b
 # so it does load server-side. Ore insertion is checked on the interacting client and smelting runs
 # on the furnace's ZDO owner (a nearby client), so every client needs it -> plugin+required.
 BlastFurnaceTakesAll|1.1.0|BlastFurnaceTakesAll.dll|1fa1b33aa6f6d340043cb5fb5385350f82cfe670780aeb434cee42ba02f0b027|plugin+required|https://thunderstore.io/package/download/TastyChickenLegs/BlastFurnaceTakesAll/1.1.0/
-# --- DISABLED until each ships a Valheim 1.0 build (see note above) ---
-# (role shown = intended role once 1.0-ready.)
-# Huginn_Map|1.0.5|Huginn.dll|1108fec508f9096efbb73aa032ba72502cc92eefe7829bd614587fd4395fcfcd|plugin+required|https://thunderstore.io/package/download/NightOfGames/Huginn_Map/1.0.5/

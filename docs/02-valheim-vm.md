@@ -71,9 +71,7 @@ launcher, scheduled world backups, and mod loading. Key points to wire in:
 > DropThat, GlassPieces**. Re-enable the Jotunn stack once Jotunn ships a 1.0 build —
 > Ethan will tell Claude when it does. Poll releases with `valheim/check-mod-updates.sh`.
 >
-> NOTE: the "Huginn is client-side only" guidance below is wrong for 1.0 — Jotunn's
-> NetworkCompatibility makes Huginn mandatory on the server too, so Jotunn/Huginn are
-> `plugin+required` (not just `required`) when re-enabled.
+> 2026-10-03: Huginn Map has since been dropped entirely (no longer tracked).
 
 Follow `../valheim-mods/SERVER-HANDOFF.md` exactly for:
 

@@ -58,22 +58,19 @@ Server-loaded plugins (Valheim 1.0): **ModSentry, DropThat, Jotunn, BetterCarts,
 OneMapToRuleThemAll** (BetterCarts and OneMapToRuleThemAll both have server-authoritative config
 sync, so they're loaded server-side and required on clients; OneMap loads clean on 1.0 — 58
 Harmony patches applied, 0 skipped — unlike Huginn).
-**Huginn is currently disabled** (loads on 1.0 but its map-share/boat features are broken — see `mods.manifest`), so
-it is not loaded right now; the rationale below is why it must be a server `plugin` **when
-re-enabled**. Two non-obvious points:
+Huginn Map was dropped (2026-10-03) — OneMapToRuleThemAll covers the shared map. Two
+non-obvious points:
 
 - **Jotunn** must be loaded server-side so ModSentry can reflect the Jotunn-dependent policy
-  DLLs (e.g. Huginn) when building the policy.
-- **Huginn** (when enabled) must be loaded server-side because it enforces **Jotunn
-  NetworkCompatibility** (`EveryoneMustHaveMod`): if a client has Huginn and the server
-  doesn't, Jotunn rejects the client with *"Client loaded additional mod: Huginn Map"* — a
-  separate layer from ModSentry. FarmGrid is also Jotunn-based but does **not** enforce compat,
-  so it stays client-side/optional.
+  DLLs (e.g. FarmGrid) when building the policy.
+- **Any Jotunn mod that enforces NetworkCompatibility** (`EveryoneMustHaveMod`) must also be
+  loaded server-side: if a client has it and the server doesn't, Jotunn rejects the client with
+  *"Client loaded additional mod: ..."* — a separate layer from ModSentry (this is what bit Huginn
+  Map before it was dropped). FarmGrid is also Jotunn-based but does **not** enforce compat, so it
+  stays client-side/optional.
 
 Rule of thumb: **any Jotunn mod that enforces NetworkCompatibility must be a server `plugin`,
-not just a policy reference.** (Loading a client-only map mod like Huginn on the headless
-server is harmless — it logs one swallowed `ArgumentNullException` building its map UI, then
-reports "Huginn active".)
+not just a policy reference.**
 
 ## Values, secrets, backups, clients
 
