@@ -17,15 +17,15 @@ join (or if you clear the saved entry).
 
 | Mod | Version | Thunderstore package | Install? |
 |---|---|---|---|
-| BepInEx pack | 5.4.2350 | denikson / BepInExPack_Valheim | ✅ dependency |
-| ConditionalConfigSync | 1.0.9 | shudnal / ConditionalConfigSync | ✅ dependency (HarpoonExtended) |
-| ModSentry | 1.0.19 | Landoria / ModSentry | ✅ required |
-| Drop That | 3.1.5 | ASharpPen / Drop_That | ✅ required |
+| BepInEx pack | 5.4.2351 | denikson / BepInExPack_Valheim | ✅ dependency |
+| ConditionalConfigSync | 1.0.10 | shudnal / ConditionalConfigSync | ✅ dependency (HarpoonExtended) |
+| ModSentry | 1.0.20 | Landoria / ModSentry | ✅ required |
+| Drop That | 3.1.6 | ASharpPen / Drop_That | ✅ required |
 | Jotunn (library) | 2.30.2 | ValheimModding / Jotunn | ✅ required |
 | BetterCarts | 1.1.1 | TastyChickenLegs / BetterCarts | ✅ required |
 | OneMapToRuleThemAll | 2.8.1 | DrummerCraig / OneMapToRuleThemAll | ✅ required |
 | GlassPieces | 1.2.8 | blacks7ar / GlassPieces | ✅ required |
-| HarpoonExtended | 1.2.0 | shudnal / HarpoonExtended | ✅ required |
+| HarpoonExtended | 1.2.1 | shudnal / HarpoonExtended | ✅ required |
 | BlastFurnaceTakesAll | 1.1.0 | TastyChickenLegs / BlastFurnaceTakesAll | ✅ required |
 | FarmGrid | 1.0.0 | Galateam / FarmGrid | ➖ optional |
 | FirstPersonMode | 1.3.12 | Azumatt / FirstPersonMode | ➖ optional |
@@ -58,8 +58,8 @@ Cross-platform, handles BepInEx for you, and pulls the exact files (so hashes ma
 2. Create a new profile, e.g. `BaldurianQuat`.
 3. Install each ✅/➖ package above **at the exact version listed** (use the package's
    *Versions* tab if it defaults to a newer one). Installing Jotunn and Drop That will
-   offer BepInEx as a dependency — accept it (5.4.2350). Installing HarpoonExtended will
-   offer ConditionalConfigSync — accept it (1.0.9); it installs both of that package's DLLs.
+   offer BepInEx as a dependency — accept it (5.4.2351). Installing HarpoonExtended will
+   offer ConditionalConfigSync — accept it (1.0.10); it installs both of that package's DLLs.
 4. Launch **Start Modded** once, load any world, then quit (lets the mods initialize).
 5. Launch modded → Join Game → **Join by code** → enter the code → enter the password
    (code + password shared separately).
@@ -72,7 +72,7 @@ Do **not** click "update" on these mods later — versions must stay pinned to t
 
 Use this if you already have BepInEx set up, or prefer manual.
 
-1. Install **BepInExPack_Valheim 5.4.2350** into your Valheim folder first
+1. Install **BepInExPack_Valheim 5.4.2351** into your Valheim folder first
    (from Thunderstore: denikson / BepInExPack_Valheim). On Windows this means copying
    `winhttp.dll`, `doorstop_config.ini`, and the `BepInEx/` folder into the game dir
    (…/steamapps/common/Valheim). Launch once so BepInEx generates its folders, then quit.
