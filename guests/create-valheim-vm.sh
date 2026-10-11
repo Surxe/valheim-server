@@ -25,7 +25,7 @@ CREATE_VM="${CREATE_VM:-/srv/dev/repos/home-server/guests/create-vm.sh}"
 # This is the from-scratch rebuild baseline.)
 VMID="${VMID:-100}" \
 VM_NAME="valheim" \
-MEM="3072" \
+MEM="3584" \
 CORES="4" \
 DISK_GROW="+28G" \
 BRIDGE="vmbr0" \
