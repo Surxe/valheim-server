@@ -34,6 +34,13 @@
 #   * names = replay of "Got character ZDOID from <name> : <peerid>:.." (join) minus
 #     "Destroying abandoned non persistent zdo <peerid> .. owner <peerid>" (leave), reset
 #     whenever a "Connections 0" proves the server was empty.
+# Uptime: an UP post also carries two ages, both read in that same guest call:
+#   * Server uptime = how long the CONTAINER has been running (docker .State.StartedAt) --
+#     the thing this feed's UP/DOWN tracks, so it resets on a VM or container restart.
+#   * World uptime  = age of the valheim_server game process, i.e. since the world was last
+#     loaded. The image's supervisord restarts that process IN PLACE (its daily
+#     05:10 idle restart, a game/BepInEx auto-update, the restart-valheim skill) without the container ever stopping, so it is
+#     usually the shorter of the two -- and those restarts never produce an edge post.
 # Edge polls do a CHEAP probe first (qm status + one `docker inspect`, no log parse) and
 # only do the expensive name-gather when they're actually about to post, so polling every
 # few minutes stays light on the guest agent. The health probe on the edge path runs
@@ -160,9 +167,24 @@ def host_health(no_guest=True):
     lvl = r.returncode if r.returncode in (0, 1, 2) else -1
     return (lvl, text)
 
+def fmt_dur(secs):
+    """Seconds -> the two most significant units ('20d 6h', '11h 17m', '4m'); '?' if unknown."""
+    if secs is None:
+        return "?"
+    d, rem = divmod(secs, 86400)
+    h, rem = divmod(rem, 3600)
+    m = rem // 60
+    if d:
+        return "%dd %dh" % (d, h)
+    if h:
+        return "%dh %dm" % (h, m)
+    return "%dm" % m
+
 # --- full Valheim status (expensive: player count + NAMES from the log) -----------------
 def full_status():
-    """Return (headline, color, detail, players_txt, state_key, server_name)."""
+    """Return (headline, color, detail, players_txt, state_key, server_name, uptimes).
+
+    uptimes = (server_txt, world_txt) when UP, else None."""
     r = run(["qm", "status", VMID], 30)
     vm_state = "unknown"
     if r and r.returncode == 0:
@@ -175,16 +197,21 @@ def full_status():
     players = None
     players_asof = None
     player_names = []
+    server_up_s = world_up_s = None
     if vm_state == "running":
         guest_cmd = (
             'sn=$(docker inspect -f "{{range .Config.Env}}{{println .}}{{end}}" %s 2>/dev/null '
             '| sed -n "s/^SERVER_NAME=//p"); echo "SERVER_NAME=$sn"; '
             'cs=$(docker inspect -f "{{.State.Running}}" %s 2>/dev/null || echo error); '
             'echo "CONTAINER=$cs"; '
+            'st=$(docker inspect -f "{{.State.StartedAt}}" %s 2>/dev/null); '
+            '[ -n "$st" ] && echo "SERVER_UP_S=$(( $(date +%%s) - $(date -d "$st" +%%s) ))"; '
+            'echo "WORLD_UP_S=$(ps -eo etimes=,comm= | grep -m1 " valheim_server" '
+            '| grep -o "[0-9]*" | head -1)"; '
             'docker logs %s 2>&1 | grep -E "Got character ZDOID from |'
             'Destroying abandoned non persistent zdo [0-9]+:[0-9]+ owner [0-9]+|'
             'Connections [0-9]+ ZDOS" | tail -4000'
-            % (CONTAINER, CONTAINER, CONTAINER)
+            % (CONTAINER, CONTAINER, CONTAINER, CONTAINER)
         )
         out = guest_out(guest_cmd, 90)
         online = {}          # peerid -> name
@@ -194,6 +221,14 @@ def full_status():
                 continue
             if line.startswith("CONTAINER="):
                 container_running = (line.split("=", 1)[1].strip() == "true")
+                continue
+            if line.startswith("SERVER_UP_S=") or line.startswith("WORLD_UP_S="):
+                key, val = line.split("=", 1)
+                if val.strip().isdigit():
+                    if key == "SERVER_UP_S":
+                        server_up_s = int(val)
+                    else:
+                        world_up_s = int(val)
                 continue
             m = re.search(r"Got character ZDOID from (.+?) : (\d+):\d+", line)
             if m and m.group(2) != "0":
@@ -214,6 +249,7 @@ def full_status():
             if nm not in seen:
                 seen.add(nm); player_names.append(nm)
 
+    uptimes = None
     if vm_state != "running":
         headline, color = "\U0001F534 DOWN", 0xE74C3C          # red
         detail = "VM %s is %s" % (VMID, vm_state)
@@ -230,6 +266,7 @@ def full_status():
         headline, color = "\U0001F7E2 UP", 0x2ECC71            # green
         detail = "VM + container running"
         state_key = "up"
+        uptimes = (fmt_dur(server_up_s), fmt_dur(world_up_s))
         if players is None:
             players_txt = "? (awaiting first server report)"
         elif players == 0:
@@ -245,17 +282,21 @@ def full_status():
             if players_asof:
                 players_txt += "  (as of %s)" % players_asof
 
-    return headline, color, detail, players_txt, state_key, server_name
+    return headline, color, detail, players_txt, state_key, server_name, uptimes
 
 # --- embeds + posting -------------------------------------------------------------------
-def valheim_embed(headline, color, detail, players_txt, server_name):
+def valheim_embed(headline, color, detail, players_txt, server_name, uptimes=None):
+    fields = [
+        {"name": "Status",         "value": "%s — %s" % (headline, detail), "inline": False},
+        {"name": "Players online", "value": players_txt,                    "inline": True},
+    ]
+    if uptimes:
+        fields.append({"name": "Server uptime", "value": uptimes[0], "inline": True})
+        fields.append({"name": "World uptime",  "value": uptimes[1], "inline": True})
     return {
         "title": "Valheim — %s" % (server_name or "server"),
         "color": color,
-        "fields": [
-            {"name": "Status",         "value": "%s — %s" % (headline, detail), "inline": False},
-            {"name": "Players online", "value": players_txt,                    "inline": True},
-        ],
+        "fields": fields,
     }
 
 def health_embed(lvl, text):
@@ -276,7 +317,10 @@ def post_embeds(embeds, tag):
     if not embeds:
         return 0
     if not WEBHOOK:
-        titles = " + ".join(e.get("title", "?") for e in embeds)
+        titles = " + ".join(
+            e.get("title", "?") + "".join(" [%s: %s]" % (f["name"], f["value"])
+                                          for f in e.get("fields", []) if "uptime" in f["name"])
+            for e in embeds)
         print("status[%s]: DISCORD_WEBHOOK_URL not set "
               "(stage /etc/home-server/discord-server-status.env) — would have posted: %s"
               % (tag, titles))
@@ -316,8 +360,9 @@ def valheim_edge():
         print("valheim-status[edge]: no change (%s) — no post" % state)
         return 0
     # Real transition -> gather full detail and announce.
-    headline, color, detail, players_txt, state_key, server_name = full_status()
-    rc = post_embeds([valheim_embed(headline, color, detail, players_txt, server_name)], "edge")
+    headline, color, detail, players_txt, state_key, server_name, uptimes = full_status()
+    rc = post_embeds([valheim_embed(headline, color, detail, players_txt, server_name, uptimes)],
+                     "edge")
     if rc == 0:
         write_state(state if state_key == "unknown" else state_key)
     return rc
@@ -348,9 +393,9 @@ if MODE == "edge":
     raise SystemExit(v_rc or h_rc)
 
 # heartbeat (default): always post Valheim status + host-health snapshot; re-baseline both.
-headline, color, detail, players_txt, state_key, server_name = full_status()
+headline, color, detail, players_txt, state_key, server_name, uptimes = full_status()
 lvl, htext = host_health(no_guest=True)
-embeds = [valheim_embed(headline, color, detail, players_txt, server_name)]
+embeds = [valheim_embed(headline, color, detail, players_txt, server_name, uptimes)]
 if lvl >= 0:
     embeds.append(health_embed(lvl, htext))
 rc = post_embeds(embeds, "heartbeat")

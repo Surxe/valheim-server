@@ -25,6 +25,18 @@ state**, not by hooking any command. `valheim/server-status-discord.sh` has two 
   transient hiccup — only confident up↔down transitions post);
 - unchanged → no post.
 
+**Uptime fields (2026-10-11):** an UP post (edge or heartbeat) carries **Server uptime** and
+**World uptime**, both read in the same guest call as the player parse (no extra agent call).
+*Server* = how long the **container** has been running (`docker inspect .State.StartedAt`) —
+the thing UP/DOWN tracks, so it resets on a VM or container restart. *World* = age of the
+`valheim_server` game process, i.e. since the world was last loaded. They differ because the
+lloesche image restarts the game process **in place** under supervisord while the container
+keeps running: its **daily idle restart at 05:10** (crond: `valheim-is-idle && supervisorctl
+restart valheim-server`), a game/BepInEx auto-update, and the `restart-valheim` skill. So
+World uptime is normally under 24h, and those in-place restarts are **invisible to the edge
+notifier** (the container never stops, so no DOWN/UP post) — the World uptime field is the
+only place they show.
+
 **Host health is folded into this same script/units** (2026-09): each run also consults
 `host/hs-health.sh --line --no-guest` (see [[host-health]]). `--heartbeat` appends a
 host-health snapshot as a **second embed** to the daily post; `--edge` posts a host-health
