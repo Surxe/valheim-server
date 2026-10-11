@@ -21,11 +21,12 @@ packages:
   - ca-certificates
   - curl
 # Swap safety net: a small on-disk swapfile so a transient guest memory spike (Valheim
-# world/mod load pushing past its 4 GiB RAM) degrades gracefully instead of OOM-killing the
+# world/mod load pushing past its 3 GiB RAM) degrades gracefully instead of OOM-killing the
 # server. Deliberately small — RAM stays the primary store (see swappiness below); this is a
-# cushion, not extra capacity. Host is only 7.1 GiB, so the VM's RAM alloc stays 4 GiB fixed
-# rather than being bumped (that would risk host OOM). Applied live to the existing VM to
-# match; cloud-init makes a rebuilt VM reproduce it.
+# cushion, not extra capacity. Host is only 7.1 GiB and was itself swapping with the VM at
+# 4 GiB, so the alloc was lowered to 3 GiB fixed (2026-10-10) — which leaves the guest little
+# headroom over the ~2.5 GiB container, so this swapfile is what absorbs the spikes. Applied
+# live to the existing VM to match; cloud-init makes a rebuilt VM reproduce it.
 swap:
   filename: /swapfile
   size: 1610612736      # 1.5 GiB, in bytes (matches the live-applied swapfile)

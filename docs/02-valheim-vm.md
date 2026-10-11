@@ -15,9 +15,9 @@ In Proxmox:
 - Guest: a small **Debian 13** VM (netinst, minimal, no desktop).
 - vCPU/RAM: Valheim is memory-hungry per world; start ~4GB RAM / 2-4 vCPU and
   adjust. An old laptop CPU is fine for a few friends. On this 7.1 GiB host the alloc
-  stays **4 GiB fixed** (bumping toward 5.5 would risk host OOM); cloud-init instead adds
-  a small **1.5 GiB swapfile** (`vm.swappiness=10`) as an OOM cushion so a transient spike
-  past RAM degrades gracefully instead of killing the server.
+  is **3 GiB fixed** (lowered from 4 GiB on 2026-10-10 because the host itself was
+  swapping); cloud-init adds a small **1.5 GiB swapfile** (`vm.swappiness=10`) as an OOM
+  cushion so a transient spike past RAM degrades gracefully instead of killing the server.
 - Disk: ~**32GB** thin-provisioned (8GB game + world + guest OS + Docker images,
   with headroom). Grow later if needed.
 - Network: attach to the **NAT/routed** internal bridge from `01-proxmox-host.md`
