@@ -122,12 +122,17 @@ threads can't starve the guest agent (agent went unresponsive again during a 202
 restart; bumped 4->6, host has 8. Recover: `qm shutdown --forceStop 1` (graceful ACPI still
 flushes the world save even with the agent down) `/ qm set --cores / qm start`, then the instant
 guest-exec answers on boot, `docker compose stop` to free CPU BEFORE staging, then start).
-**RAM:** alloc is **4 GiB fixed** (balloon off); host is only 7.1 GiB, so 4 GiB is the safe
-ceiling — bumping toward 5.5 would risk **host** OOM (which kills the whole VM), and the guest
-isn't RAM-pressured anyway (~1.7 GiB free, container ~2.2 GiB). The guest has a **1.5 GiB
-swapfile** (`/swapfile`, `vm.swappiness=10`) as an OOM cushion so a transient spike past 4 GiB
-degrades instead of crashing the server; it's config-as-code in `guests/cloud-init-valheim.yaml`
-(a rebuild reproduces it) and was applied live to the running VM to match. Do
+**RAM:** alloc is **3 GiB fixed** (`memory: 3072`), lowered from 4 GiB on 2026-10-10 (Ethan)
+— the 7.1 GiB host was itself swapping (5.1 GiB used, 1.6 GiB in swap) with the VM holding
+~4 GiB. This is TIGHT for the guest: just before the change it used 2.5 GiB of 3.9 with the
+container alone at ~2.5 GiB, so at 3 GiB (~2.9 usable) expect world/mod loads to dip into
+swap. If the server hitches or loads slowly, **4096 is the rollback** (never above 4 GiB:
+that risks **host** OOM, which kills the whole VM). A memory change needs a full VM
+stop/start: `docker stop -t 120 valheim` -> `qm shutdown` -> `qm set 100 --memory N` ->
+`qm start` -> `docker start valheim` (an explicit stop defeats `restart: unless-stopped`).
+The guest has a **1.5 GiB swapfile** (`/swapfile`, `vm.swappiness=10`) as an OOM cushion so
+a spike past RAM degrades instead of crashing the server; it's config-as-code in
+`guests/cloud-init-valheim.yaml` (a rebuild reproduces it) and was applied live to match. Do
 NOT leave DropThat `WriteDropTablesToFiles` enabled — it pegs the server on world start (use it
 briefly to dump prefab ids, then off).
 **Bumping a mod version:** `stage-mods` reuses a cached zip in the VM's `/srv/valheim/mod-cache/`
