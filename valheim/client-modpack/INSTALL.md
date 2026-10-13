@@ -27,9 +27,9 @@ join (or if you clear the saved entry).
 | GlassPieces | 1.2.8 | blacks7ar / GlassPieces | ✅ required |
 | HarpoonExtended | 1.2.1 | shudnal / HarpoonExtended | ✅ required |
 | BlastFurnaceTakesAll | 1.1.0 | TastyChickenLegs / BlastFurnaceTakesAll | ✅ required |
+| InventoryActions | 1.1.14 | sighsorry / InventoryActions | ✅ required |
 | FarmGrid | 1.0.0 | Galateam / FarmGrid | ➖ optional |
 | FirstPersonMode | 1.3.12 | Azumatt / FirstPersonMode | ➖ optional |
-| FavoriteItems | 1.2.0 | ronaldoniz / FavoriteItems | ➖ optional |
 | Unshamed | 1.0.5 | Azumatt / Unshamed | ➖ optional (achievements) |
 
 **Install?** ✅ required = you're kicked without it. ➖ optional = client-side preference,
