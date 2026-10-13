@@ -53,14 +53,8 @@ ServerSync replacement Harpoon 1.2.0 switched to. GOTCHA: CCS ships **TWO** DLLs
 Furnace also smelts copper/tin/iron/silver ore + copper/iron/bronze scrap (Smelter.Awake postfix on
 `m_conversion`). Mistlands-era build but loads CLEAN on 1.0; logs as `BlastFurnaceTakesAll 1.0.9` (the
 author's BepInPlugin version, not a mismatch). Snapshot `pre_blastfurnace_20260929`.
-**Added 2026-10-12:** **InventoryActions 1.1.14 (sighsorry)** `plugin+required`, REPLACING the optional
-ronaldoniz/FavoriteItems 1.2.0 (line + DLL removed). Favorite slots (Alt+click), quick stack / restock from
-chests (hold E / Alt+E), sorting, trash panel. It can run client-only, but Ethan wanted Alt+E restock reined in
-for everyone, which needs its ServerSync config -> loaded server-side + required. Synced settings are
-repo-managed in `valheim/sighsorry.InventoryActions.cfg` (staged by `stage-mods.sh`): `Area Take Stacks
-Range = 0` stops restock pulling from NEARBY chests; the looked-at chest still restocks (no synced off
-switch - full unbind is the per-client `Container Restock Key`). Loads CLEAN on 1.0; client-verified by
-Ethan 2026-10-12. Not compatible with InventorySlots / Quick Stack Store. Snapshot `pre_inventoryactions_20261012`.
+**Added 2026-10-12:** **InventoryActions 1.1.14 (sighsorry)** `plugin+required` — the item-favoriting mod
+(Alt+click an inventory slot to favorite it). Replaces ronaldoniz/FavoriteItems.
 **Bumped 2026-10-04:** ModSentry 1.0.19 -> **1.0.20** (BepInEx 5.4.2351 rebuild), DropThat 3.1.5 -> **3.1.6**
 (fixes CharacterDrop tracking broken by 1.0), ConditionalConfigSync 1.0.9 -> **1.0.10** (soft-dep API; both
 DLLs re-pinned — mod-fetch.sh still only extracts the library DLL, pull `.Plugin` from the zip by hand),
