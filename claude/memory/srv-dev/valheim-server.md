@@ -20,7 +20,7 @@ pipe through python3 for `out-data`). World + config bind-mounted at `/srv/valhe
 
 **State (2026-10): on Valheim 1.0 (l-1.0.7, Unity 6), BepInExPack 5.4.2351.** Server plugins: **ModSentry 1.0.20 +
 DropThat 3.1.6 + Jotunn 2.30.2 + BetterCarts 1.1.1 + OneMapToRuleThemAll 2.8.1 + GlassPieces 1.2.8 +
-ConditionalConfigSync 1.0.10 + HarpoonExtended 1.2.1 + BlastFurnaceTakesAll 1.1.0**
+ConditionalConfigSync 1.0.10 + HarpoonExtended 1.2.1 + BlastFurnaceTakesAll 1.1.0 + InventoryActions 1.1.14**
 (Jotunn/DropThat on their 1.0 builds; Jotunn no longer crashes on connect). Bumped 2026-09-12: ModSentry
 1.0.17 -> 1.0.18 (Valheim 1.0 migration), OneMapToRuleThemAll 2.8.0 -> 2.8.1 (fixes .explored
 file pathing on the new 1.0 save format), FavoriteItems 1.1.0 -> 1.2.0 (optional ExtraSlots
@@ -53,6 +53,14 @@ ServerSync replacement Harpoon 1.2.0 switched to. GOTCHA: CCS ships **TWO** DLLs
 Furnace also smelts copper/tin/iron/silver ore + copper/iron/bronze scrap (Smelter.Awake postfix on
 `m_conversion`). Mistlands-era build but loads CLEAN on 1.0; logs as `BlastFurnaceTakesAll 1.0.9` (the
 author's BepInPlugin version, not a mismatch). Snapshot `pre_blastfurnace_20260929`.
+**Added 2026-10-12:** **InventoryActions 1.1.14 (sighsorry)** `plugin+required`, REPLACING the optional
+ronaldoniz/FavoriteItems 1.2.0 (line + DLL removed). Favorite slots (Alt+click), quick stack / restock from
+chests (hold E / Alt+E), sorting, trash panel. It can run client-only, but Ethan wanted Alt+E restock reined in
+for everyone, which needs its ServerSync config -> loaded server-side + required. Synced settings are
+repo-managed in `valheim/sighsorry.InventoryActions.cfg` (staged by `stage-mods.sh`): `Area Take Stacks
+Range = 0` stops restock pulling from NEARBY chests; the looked-at chest still restocks (no synced off
+switch - full unbind is the per-client `Container Restock Key`). Loads CLEAN on 1.0; client-verified by
+Ethan 2026-10-12. Not compatible with InventorySlots / Quick Stack Store. Snapshot `pre_inventoryactions_20261012`.
 **Bumped 2026-10-04:** ModSentry 1.0.19 -> **1.0.20** (BepInEx 5.4.2351 rebuild), DropThat 3.1.5 -> **3.1.6**
 (fixes CharacterDrop tracking broken by 1.0), ConditionalConfigSync 1.0.9 -> **1.0.10** (soft-dep API; both
 DLLs re-pinned — mod-fetch.sh still only extracts the library DLL, pull `.Plugin` from the zip by hand),
@@ -89,7 +97,7 @@ version needed). **FirstPersonMode 1.3.12 (Azumatt)** added 2026-09-11 as a seco
 preference, not server-loaded). Deps only BepInEx. Load-tested server-side on 1.0 before shipping
 (staged as `plugin`, restarted, log clean: `Loading [FirstPersonMode 1.3.12]` + its ConfigSync RPC
 registered, no TypeLoad/Method/Field errors), then restored to `optional`-only. DLL + SHA committed,
-added to the client docs + INSTALL docs. **FavoriteItems 1.2.0 (ronaldoniz)** added 2026-09-12
+added to the client docs + INSTALL docs. **FavoriteItems 1.2.0 (ronaldoniz)** (DROPPED 2026-10-12, replaced by InventoryActions - see above) added 2026-09-12
 as a third client-side **optional** mod (ModSentry_Optional; Alt-click marks inventory stacks as
 favorites — golden star, quick-stack protection via a public API). Deps only BepInEx. **Client-only
 by design** — `BepInProcess("valheim.exe")`, so BepInEx SKIPS it on the dedicated server; the

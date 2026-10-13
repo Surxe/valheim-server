@@ -16,6 +16,7 @@ symlink into the host's repo, so config is **pushed into the VM** over the QEMU 
 /srv/valheim/stage-mods.sh          <- valheim/stage-mods.sh
 /srv/valheim/drop_that.drop_table.cfg <- valheim/drop_that.drop_table.cfg
 /srv/valheim/drummercraig.one_map_to_rule_them_all.cfg <- valheim/drummercraig.one_map_to_rule_them_all.cfg
+/srv/valheim/sighsorry.InventoryActions.cfg <- valheim/sighsorry.InventoryActions.cfg (server-synced settings)
 /srv/valheim/OneMapToRuleThemAll.catalog.txt <- valheim/OneMapToRuleThemAll.catalog.txt (staged into BepInEx/OneMapToRuleThemAll/)
 /srv/valheim/config/                <- bind-mounted to the container /config (world + BepInEx)
 /srv/valheim/data/                  <- bind-mounted to /opt/valheim (game + runtime BepInEx)
@@ -25,7 +26,7 @@ symlink into the host's repo, so config is **pushed into the VM** over the QEMU 
 ## Applying a mod/config change
 
 1. Edit the files here (`mods.manifest`, `dll/`, `drop_that.drop_table.cfg`,
-   `drummercraig.one_map_to_rule_them_all.cfg`, `OneMapToRuleThemAll.catalog.txt`, `docker-compose.yml`).
+   `drummercraig.one_map_to_rule_them_all.cfg`, `sighsorry.InventoryActions.cfg`, `OneMapToRuleThemAll.catalog.txt`, `docker-compose.yml`).
 2. From the Proxmox host: **`guests/vm-apply-valheim.sh`** — pushes the files into the VM,
    runs `stage-mods.sh`, and restarts the container. (Or do those three steps by hand.)
 3. A restart rotates the crossplay join code — see `client-modpack/INSTALL.md`.

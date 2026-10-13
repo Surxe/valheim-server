@@ -21,7 +21,7 @@ source "$VDIR/lib-gx.sh"
 # "not running" while guest-exec works), and we don't want to refuse a deploy the agent can do.
 gx_ready || { echo "FATAL: VM $VMID guest agent not answering a trivial exec (ping is unreliable here)"; exit 1; }
 
-for f in docker-compose.yml mods.manifest stage-mods.sh drop_that.drop_table.cfg drummercraig.one_map_to_rule_them_all.cfg OneMapToRuleThemAll.catalog.txt; do
+for f in docker-compose.yml mods.manifest stage-mods.sh drop_that.drop_table.cfg drummercraig.one_map_to_rule_them_all.cfg OneMapToRuleThemAll.catalog.txt sighsorry.InventoryActions.cfg; do
   gx_push "$VDIR/$f" "/srv/valheim/$f"
 done
 gx bash -c "chmod +x /srv/valheim/stage-mods.sh" >/dev/null

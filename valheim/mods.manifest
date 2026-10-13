@@ -92,15 +92,19 @@ FarmGrid|1.0.0|FarmGrid.dll|35f77dd50625c30cc4fe20d49ea1fbd7e05f76a64c97eb0588ce
 # 1.3.12 (actively maintained through 1.0). Load-tested server-side on 1.0: loads CLEAN (no
 # TypeLoad/Harmony/dependency errors), so it won't break clients that run it (cf. the dropped Valheazy Favorite_Items).
 FirstPersonMode|1.3.12|FirstPersonMode.dll|f942c253a38b667845935c6819e9f63e9606499af6775c3533b98d9e9761e791|optional|https://thunderstore.io/package/download/Azumatt/FirstPersonMode/1.3.12/
-# FavoriteItems (ronaldoniz): Alt-click to mark inventory stacks as favorites, with a public
-# API + quick-stack integrations. Client-side optional mod (ModSentry_Optional) - each player
-# who wants it installs it; replaces the abandoned/broken Valheazy/Favorite_Items (0.1.5).
-# Deps only BepInEx (5.4.2350 = the 1.0 pack); built 2026-09-11. Client-only by design
-# (BepInProcess valheim.exe): BepInEx SKIPS it on the dedicated server, so the server-side
-# load-test is N/A - the remaining check is a real-client smoke test (install + Alt-click).
-# Bumped 1.1.0 -> 1.2.0 on 2026-09-12: optional ExtraSlots 1.2.3 special-slot protection via
-# its public API (NOT a required dependency; disabled by default).
-FavoriteItems|1.2.0|FavoriteItems.dll|acc41c9304952623c2024700245d3b723c25272f1f923737d53626d8d4caf22c|optional|https://thunderstore.io/package/download/ronaldoniz/FavoriteItems/1.2.0/
+# InventoryActions (sighsorry): favorite slots (Alt+click) plus quick stack / restock from nearby
+# chests (hold E / Alt+E), inventory + container sorting, per-item restock targets, auto-pickup
+# exclusions and a trash button - the inventory tools split out of the author's InventorySlots.
+# Added 2026-10-12 (v1.1.14), REPLACING ronaldoniz/FavoriteItems 1.2.0 (dropped the same day; its
+# line + DLL were removed, so check-mod-updates.sh no longer polls it). Deps only BepInEx
+# (5.4.2351). It can run client-only, but it carries ServerSync, and Ethan wants the hold Alt+E
+# favorite restock reined in for everyone - that needs the server's synced config, so it loads
+# server-side AND every client must run the same version: plugin+required. Synced settings live in
+# the checked-in sighsorry.InventoryActions.cfg (Area Take Stacks Range = 0 -> restock no longer
+# pulls from nearby chests; the looked-at chest still restocks, there is no synced off switch).
+# LOAD-TEST 2026-10-12 on VM 100: Loading [InventoryActions 1.1.14], zero load errors. Do NOT run
+# it alongside InventorySlots or Quick Stack Store. Favorites are not migrated from FavoriteItems.
+InventoryActions|1.1.14|InventoryActions.dll|566d996412b32f5e10bb4c4613bcd1ade0ff47d1b219e845039d3cbd37ba915a|plugin+required|https://thunderstore.io/package/download/sighsorry/InventoryActions/1.1.14/
 # Unshamed (Azumatt): re-enables Steam achievements for players running mods. On 1.0 the achievement
 # gate (Achievements.CanGetAchievements / IsCheatedAtAll) refuses achievements while Game.isModded is
 # true (BepInEx sets it) — so every friend on our required client mods is blocked. Unshamed patches

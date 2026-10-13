@@ -46,7 +46,7 @@ name). Clean = its `Loading [..]` line present, no `TypeLoad/Method/Field/Except
 fails, roll back (`qm rollback 100 <snap>`) — do not ship. Then revert the scratch role to its
 real value. (`stage-mods.sh` wipes all plugin dirs each run, so a leftover test plugin can't linger.)
 
-**Client-only mod that sets `BepInProcess("valheim.exe")`** (e.g. ronaldoniz/FavoriteItems): BepInEx
+**Client-only mod that sets `BepInProcess("valheim.exe")`** (e.g. the since-dropped ronaldoniz/FavoriteItems): BepInEx
 logs `Skipping [X ...] because of process filters (valheim.exe)` and never emits a `Loading [..]`
 line on the server. That's EXPECTED, not a load failure — such a mod can't load server-side by
 design, so the `Loading [..]` gate is N/A. Treat "Skipping ... process filters" as clean (not a
