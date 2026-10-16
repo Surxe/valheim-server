@@ -78,7 +78,9 @@
 ModSentry|1.0.20|Landoria.ModSentry.dll|a2776c6b2a7641e2c06241502cf79598adf3185ad5ebe01260f14e24fa7e8de9|plugin+required|https://thunderstore.io/package/download/Landoria/ModSentry/1.0.20/
 # Drop That (ASharpPen): loot-table config. Bumped 3.1.5 -> 3.1.6 on 2026-10-04 (fixes CharacterDrop
 # tracking broken by Valheim 1.0 - autostacking/modifiers/drop limiters - and a skipped AmountLimit).
-Drop_That|3.1.6|Valheim.DropThat.dll|f20e41b20d8b8c065f803a779a1759752604e26084ffb345cc0360b220abfeb7|plugin+required|https://thunderstore.io/package/download/ASharpPen/Drop_That/3.1.6/
+# Bumped 3.1.6 -> 3.1.7 on 2026-10-16 (more CharacterDrop tracking fixes, nonplayer damage-type
+# condition, debug-file biome naming). Deps: BepInEx only.
+Drop_That|3.1.7|Valheim.DropThat.dll|13262032827848b835cd7e4ae282889b2442369c7bf70080e37c0b40bac367dd|plugin+required|https://thunderstore.io/package/download/ASharpPen/Drop_That/3.1.7/
 # Jotunn (ValheimModding): the modding library most of our set builds on. Bumped 2.30.0 ->
 # 2.30.2 on 2026-09-21. NOTE: 2.30.2's Thunderstore zip stores paths with backslashes
 # (plugins\Jotunn.dll), so `unzip` warns + exits 1 and mod-fetch.sh aborts under set -e; the
@@ -156,8 +158,10 @@ GlassPieces|1.2.8|GlassPieces.dll|83da4469bc2c52c8276e188f3afa03356ebe446946b4f4
 # DLL (the format is one SHA-pinned DLL per line); both come from the same package zip/url.
 # Bumped 1.0.9 -> 1.0.10 on 2026-10-04 (adds a soft-dependency API for mod authors; mod-fetch.sh
 # only extracts the library DLL, so the .Plugin DLL was pulled from the zip by hand again).
-ConditionalConfigSync|1.0.10|ConditionalConfigSync.dll|3f9cd0d2b80ab14d289f4621f25c11c84045919cbad8013955450cf6e662ef4e|plugin+required|https://thunderstore.io/package/download/shudnal/ConditionalConfigSync/1.0.10/
-ConditionalConfigSync.Plugin|1.0.10|ConditionalConfigSync.Plugin.dll|a9508884c9a2dc6e1cf1a4d0c64f996d54a738c17d42f0bce612d4a4efbaf2d5|plugin+required|https://thunderstore.io/package/download/shudnal/ConditionalConfigSync/1.0.10/
+# Bumped 1.0.10 -> 1.0.11 on 2026-10-16 (config-sync transfers keep going on slow connections while
+# they make progress; needs the update on server AND clients). .Plugin DLL again pulled by hand.
+ConditionalConfigSync|1.0.11|ConditionalConfigSync.dll|9e3aa79de10b31a4ee06e7cd94faf46d87b3bf3ec64ea3d15b07a396836f8b8a|plugin+required|https://thunderstore.io/package/download/shudnal/ConditionalConfigSync/1.0.11/
+ConditionalConfigSync.Plugin|1.0.11|ConditionalConfigSync.Plugin.dll|9aa35c2ce769dfefb01bcdec77cf2c64227ce7c41b995a2b982516449c18290f|plugin+required|https://thunderstore.io/package/download/shudnal/ConditionalConfigSync/1.0.11/
 # HarpoonExtended (shudnal): overhauled harpoon — pull movable targets toward you or pull yourself
 # to fixed targets, retract/cast the line, configurable damage/durability/stamina/distances +
 # Feather Fall while harpooning. Added 2026-09-21, v1.2.0 ("Updated for Valheim 1.0.15", listed under
@@ -172,3 +176,10 @@ HarpoonExtended|1.2.1|HarpoonExtended.dll|db3fb9d1ac715750445d3f9c6e795c6313513d
 # so it does load server-side. Ore insertion is checked on the interacting client and smelting runs
 # on the furnace's ZDO owner (a nearby client), so every client needs it -> plugin+required.
 BlastFurnaceTakesAll|1.1.0|BlastFurnaceTakesAll.dll|1fa1b33aa6f6d340043cb5fb5385350f82cfe670780aeb434cee42ba02f0b027|plugin+required|https://thunderstore.io/package/download/TastyChickenLegs/BlastFurnaceTakesAll/1.1.0/
+# QuickTeleport (Muindor): faster portal + dungeon-entrance teleports (Auto mode ends the teleport once
+# the screen is black and the destination has loaded). Added 2026-10-16, v1.1.0 (built for Valheim 1.0).
+# Deps: BepInEx only (no Jotunn/ServerSync; not in the version check). Purely client-side timing, so
+# optional with each player's own default config. It CAN be a server plugin with
+# Server.ConfigPriority=true to push one timing to every client that has it - deliberately not done.
+# LOAD-TEST 2026-10-16 on VM 100 (temporary plugin role): Loading [Quick Teleport 1.1.0], zero load errors.
+QuickTeleport|1.1.0|QuickTeleport.dll|8b87679af090018d7196c5a3efe20d3ac945883568cd28560e5d1b937e655889|optional|https://thunderstore.io/package/download/Muindor/QuickTeleport/1.1.0/
