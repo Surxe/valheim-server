@@ -11,6 +11,13 @@
 #   GX_TIMEOUT=180 gx bash -lc 'cd /srv/valheim && ./stage-mods.sh'
 VMID="${VMID:-100}"
 
+# Fail fast when not root: as dev, every `qm guest exec` fails and gx_ready reads that as a
+# wedged guest agent — a misleading "agent not answering" instead of "run with sudo".
+if [ "$(id -u)" -ne 0 ]; then
+  echo "$(basename "$0"): needs root (qm is root-only) — re-run with sudo" >&2
+  exit 2
+fi
+
 # gx_ready [tries=3] [timeout=15] — liveness probe. Fires a trivial `/bin/true` exec and checks
 # the agent actually ran it. Do NOT use `qm agent ping` for this: on VM 100 ping false-negatives
 # (reports "not running" while `qm guest exec` works). Gate any heavy read on this so we never
