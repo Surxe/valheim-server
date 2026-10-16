@@ -18,9 +18,9 @@ join (or if you clear the saved entry).
 | Mod | Version | Thunderstore package | Install? |
 |---|---|---|---|
 | BepInEx pack | 5.4.2351 | denikson / BepInExPack_Valheim | ✅ dependency |
-| ConditionalConfigSync | 1.0.10 | shudnal / ConditionalConfigSync | ✅ dependency (HarpoonExtended) |
+| ConditionalConfigSync | 1.0.11 | shudnal / ConditionalConfigSync | ✅ dependency (HarpoonExtended) |
 | ModSentry | 1.0.20 | Landoria / ModSentry | ✅ required |
-| Drop That | 3.1.6 | ASharpPen / Drop_That | ✅ required |
+| Drop That | 3.1.7 | ASharpPen / Drop_That | ✅ required |
 | Jotunn (library) | 2.30.2 | ValheimModding / Jotunn | ✅ required |
 | BetterCarts | 1.1.1 | TastyChickenLegs / BetterCarts | ✅ required |
 | OneMapToRuleThemAll | 2.8.1 | DrummerCraig / OneMapToRuleThemAll | ✅ required |
@@ -30,6 +30,7 @@ join (or if you clear the saved entry).
 | InventoryActions | 1.1.14 | sighsorry / InventoryActions | ✅ required |
 | FarmGrid | 1.0.0 | Galateam / FarmGrid | ➖ optional |
 | FirstPersonMode | 1.3.12 | Azumatt / FirstPersonMode | ➖ optional |
+| QuickTeleport | 1.1.0 | Muindor / QuickTeleport | ➖ optional (faster portals) |
 | Unshamed | 1.0.5 | Azumatt / Unshamed | ➖ optional (achievements) |
 
 **Install?** ✅ required = you're kicked without it. ➖ optional = client-side preference,

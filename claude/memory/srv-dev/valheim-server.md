@@ -19,8 +19,8 @@ pipe through python3 for `out-data`). World + config bind-mounted at `/srv/valhe
 `hooks/sync-plugins.sh` (PRE_SERVER_RUN_HOOK so auto-updates keep mods loaded).
 
 **State (2026-10): on Valheim 1.0 (l-1.0.7, Unity 6), BepInExPack 5.4.2351.** Server plugins: **ModSentry 1.0.20 +
-DropThat 3.1.6 + Jotunn 2.30.2 + BetterCarts 1.1.1 + OneMapToRuleThemAll 2.8.1 + GlassPieces 1.2.8 +
-ConditionalConfigSync 1.0.10 + HarpoonExtended 1.2.1 + BlastFurnaceTakesAll 1.1.0 + InventoryActions 1.1.14**
+DropThat 3.1.7 + Jotunn 2.30.2 + BetterCarts 1.1.1 + OneMapToRuleThemAll 2.8.1 + GlassPieces 1.2.8 +
+ConditionalConfigSync 1.0.11 + HarpoonExtended 1.2.1 + BlastFurnaceTakesAll 1.1.0 + InventoryActions 1.1.14**
 (Jotunn/DropThat on their 1.0 builds; Jotunn no longer crashes on connect). Bumped 2026-09-12: ModSentry
 1.0.17 -> 1.0.18 (Valheim 1.0 migration), OneMapToRuleThemAll 2.8.0 -> 2.8.1 (fixes .explored
 file pathing on the new 1.0 save format), FavoriteItems 1.1.0 -> 1.2.0 (optional ExtraSlots
@@ -53,6 +53,13 @@ ServerSync replacement Harpoon 1.2.0 switched to. GOTCHA: CCS ships **TWO** DLLs
 Furnace also smelts copper/tin/iron/silver ore + copper/iron/bronze scrap (Smelter.Awake postfix on
 `m_conversion`). Mistlands-era build but loads CLEAN on 1.0; logs as `BlastFurnaceTakesAll 1.0.9` (the
 author's BepInPlugin version, not a mismatch). Snapshot `pre_blastfurnace_20260929`.
+**2026-10-16:** DropThat 3.1.6 -> **3.1.7** (more CharacterDrop tracking fixes), ConditionalConfigSync
+1.0.10 -> **1.0.11** (slow-connection sync reliability; `.Plugin` DLL pulled from the zip by hand again).
+**QuickTeleport 1.1.0 (Muindor)** ADDED as client-side **optional** with default config (faster portal /
+dungeon teleports; deps only BepInEx, not in the version check). It can optionally be a server plugin with
+`Server.ConfigPriority=true` to force one timing on clients that have it — deliberately not done. Load-tested
+under a temporary `plugin` role (`Loading [Quick Teleport 1.1.0]`, clean), then reverted. verify-boot CLEAN.
+Snapshot `pre_qtp_bumps_20261016`.
 **Added 2026-10-12:** **InventoryActions 1.1.14 (sighsorry)** `plugin+required` — the item-favoriting mod
 (Alt+click an inventory slot to favorite it). Replaces ronaldoniz/FavoriteItems.
 **Bumped 2026-10-04:** ModSentry 1.0.19 -> **1.0.20** (BepInEx 5.4.2351 rebuild), DropThat 3.1.5 -> **3.1.6**
