@@ -41,6 +41,12 @@
 #     loaded. The image's supervisord restarts that process IN PLACE (its daily
 #     05:10 idle restart, a game/BepInEx auto-update, the restart-valheim skill) without the container ever stopping, so it is
 #     usually the shorter of the two -- and those restarts never produce an edge post.
+# FROZEN: the game process can wedge while its container keeps running (2026-10-20: no
+# logs, saves or backups for 2 days while this feed said UP). The game autosaves every
+# 30 min even when empty, rewriting worlds_local/<world>/_main.<n>.ok, so "newest save
+# older than VALHEIM_FROZEN_AFTER_S (default 3h) AND the game process older than that too"
+# = frozen. The process-age guard keeps a fresh restart (no save yet) from tripping it.
+# It rides along in the existing probe's guest call, so it adds no extra agent traffic.
 # Edge polls do a CHEAP probe first (qm status + one `docker inspect`, no log parse) and
 # only do the expensive name-gather when they're actually about to post, so polling every
 # few minutes stays light on the guest agent. The health probe on the edge path runs
@@ -51,6 +57,8 @@
 # via EnvironmentFile:
 #   DISCORD_WEBHOOK_URL              (required to post)
 #   VALHEIM_VMID (default 100)   VALHEIM_CONTAINER (default valheim)   [optional overrides]
+#   VALHEIM_WORLDS_DIR (default /srv/valheim/config/worlds_local, the in-VM bind mount)
+#   VALHEIM_FROZEN_AFTER_S (default 10800 = 3h)
 #   VALHEIM_STATUS_STATE_FILE (default /var/lib/home-server/valheim-status.state)
 #   HOST_HEALTH_STATE_FILE    (default /var/lib/home-server/host-health.state)
 #   HS_HEALTH                 (default: the sibling home-server repo's host/hs-health.sh;
@@ -64,6 +72,8 @@ set -euo pipefail
 : "${VALHEIM_CONTAINER:=valheim}"
 : "${VALHEIM_STATUS_STATE_FILE:=/var/lib/home-server/valheim-status.state}"
 : "${HOST_HEALTH_STATE_FILE:=/var/lib/home-server/host-health.state}"
+: "${VALHEIM_WORLDS_DIR:=/srv/valheim/config/worlds_local}"
+: "${VALHEIM_FROZEN_AFTER_S:=10800}"
 
 HERE="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 # hs-health.sh lives in the sibling home-server (host) repo, not this one. Default to it by
@@ -78,7 +88,7 @@ case "${1:-}" in
 esac
 
 export VALHEIM_VMID VALHEIM_CONTAINER VALHEIM_STATUS_STATE_FILE
-export HOST_HEALTH_STATE_FILE HS_HEALTH
+export HOST_HEALTH_STATE_FILE HS_HEALTH VALHEIM_WORLDS_DIR VALHEIM_FROZEN_AFTER_S
 export VALHEIM_STATUS_MODE="$MODE"
 
 python3 - <<'PY'
@@ -93,6 +103,30 @@ STATE_FILE = os.environ.get("VALHEIM_STATUS_STATE_FILE",
 HEALTH_STATE_FILE = os.environ.get("HOST_HEALTH_STATE_FILE",
                                    "/var/lib/home-server/host-health.state")
 HS_HEALTH  = os.environ.get("HS_HEALTH", "")
+WORLDS_DIR = os.environ.get("VALHEIM_WORLDS_DIR", "/srv/valheim/config/worlds_local")
+FROZEN_AFTER_S = int(os.environ.get("VALHEIM_FROZEN_AFTER_S", "10800"))
+
+# Guest shell snippet: prints WORLD_UP_S=<game process age s> and SAVE_AGE_S=<age s of the
+# newest world save marker>; either is empty when unknown (no process yet / no save found).
+FROZEN_PROBE = (
+    'echo "WORLD_UP_S=$(ps -eo etimes=,comm= | grep -m1 " valheim_server" '
+    '| grep -o "[0-9]*" | head -1)"; '
+    'sv=$(find %s -maxdepth 2 -name "_main.*.ok" -printf "%%T@\\n" 2>/dev/null '
+    '| sort -n | tail -1); '
+    'echo "SAVE_AGE_S=${sv:+$(( $(date +%%s) - ${sv%%.*} ))}"; ' % WORLDS_DIR
+)
+
+def kv_int(out, key):
+    """Pull an int from a 'KEY=val' line in guest output; None if missing/blank."""
+    for line in out.splitlines():
+        if line.startswith(key + "="):
+            v = line.split("=", 1)[1].strip()
+            return int(v) if v.isdigit() else None
+    return None
+
+def is_frozen(world_up_s, save_age_s):
+    return (world_up_s is not None and save_age_s is not None
+            and world_up_s > FROZEN_AFTER_S and save_age_s > FROZEN_AFTER_S)
 
 def run(cmd, timeout):
     try:
@@ -114,7 +148,7 @@ def guest_out(cmd, timeout):
 
 # --- cheap probe: coarse up/down/unknown WITHOUT the expensive log parse ----------------
 def cheap_state():
-    """Return one of 'up' | 'down' | 'unknown' using only quick calls."""
+    """Return one of 'up' | 'frozen' | 'down' | 'unknown' using only quick calls."""
     r = run(["qm", "status", VMID], 30)
     vm_state = "unknown"
     if r and r.returncode == 0:
@@ -124,9 +158,13 @@ def cheap_state():
     if vm_state != "running":
         # A confidently-off VM (stopped/paused/…) is DOWN; a failed qm call is unknown.
         return "down" if vm_state != "unknown" else "unknown"
-    cs = guest_out('docker inspect -f "{{.State.Running}}" %s 2>/dev/null || echo error'
-                   % CONTAINER, 30).strip()
+    out = guest_out('echo "CONTAINER=$(docker inspect -f "{{.State.Running}}" %s 2>/dev/null '
+                    '|| echo error)"; %s' % (CONTAINER, FROZEN_PROBE), 30)
+    cs = next((l.split("=", 1)[1].strip() for l in out.splitlines()
+               if l.startswith("CONTAINER=")), "")
     if cs == "true":
+        if is_frozen(kv_int(out, "WORLD_UP_S"), kv_int(out, "SAVE_AGE_S")):
+            return "frozen"
         return "up"
     if cs == "false":
         return "down"
@@ -197,7 +235,7 @@ def full_status():
     players = None
     players_asof = None
     player_names = []
-    server_up_s = world_up_s = None
+    server_up_s = world_up_s = save_age_s = None
     if vm_state == "running":
         guest_cmd = (
             'sn=$(docker inspect -f "{{range .Config.Env}}{{println .}}{{end}}" %s 2>/dev/null '
@@ -206,12 +244,12 @@ def full_status():
             'echo "CONTAINER=$cs"; '
             'st=$(docker inspect -f "{{.State.StartedAt}}" %s 2>/dev/null); '
             '[ -n "$st" ] && echo "SERVER_UP_S=$(( $(date +%%s) - $(date -d "$st" +%%s) ))"; '
-            'echo "WORLD_UP_S=$(ps -eo etimes=,comm= | grep -m1 " valheim_server" '
-            '| grep -o "[0-9]*" | head -1)"; '
+            % (CONTAINER, CONTAINER, CONTAINER)
+        ) + FROZEN_PROBE + (
             'docker logs %s 2>&1 | grep -E "Got character ZDOID from |'
             'Destroying abandoned non persistent zdo [0-9]+:[0-9]+ owner [0-9]+|'
             'Connections [0-9]+ ZDOS" | tail -4000'
-            % (CONTAINER, CONTAINER, CONTAINER, CONTAINER)
+            % CONTAINER
         )
         out = guest_out(guest_cmd, 90)
         online = {}          # peerid -> name
@@ -222,13 +260,15 @@ def full_status():
             if line.startswith("CONTAINER="):
                 container_running = (line.split("=", 1)[1].strip() == "true")
                 continue
-            if line.startswith("SERVER_UP_S=") or line.startswith("WORLD_UP_S="):
+            if line.split("=", 1)[0] in ("SERVER_UP_S", "WORLD_UP_S", "SAVE_AGE_S"):
                 key, val = line.split("=", 1)
                 if val.strip().isdigit():
                     if key == "SERVER_UP_S":
                         server_up_s = int(val)
-                    else:
+                    elif key == "WORLD_UP_S":
                         world_up_s = int(val)
+                    else:
+                        save_age_s = int(val)
                 continue
             m = re.search(r"Got character ZDOID from (.+?) : (\d+):\d+", line)
             if m and m.group(2) != "0":
@@ -262,6 +302,11 @@ def full_status():
         headline, color = "\U0001F7E0 UNKNOWN", 0xF39C12       # orange
         detail = "VM up, but the guest agent did not answer"
         players_txt, state_key = "?", "unknown"
+    elif is_frozen(world_up_s, save_age_s):
+        headline, color = "\U0001F534 FROZEN", 0xE74C3C       # red
+        detail = ("container running, but no world save for %s -- restart the container "
+                  "(restart-valheim skill)" % fmt_dur(save_age_s))
+        players_txt, state_key = "\u2014", "frozen"
     else:
         headline, color = "\U0001F7E2 UP", 0x2ECC71            # green
         detail = "VM + container running"
@@ -399,7 +444,7 @@ embeds = [valheim_embed(headline, color, detail, players_txt, server_name, uptim
 if lvl >= 0:
     embeds.append(health_embed(lvl, htext))
 rc = post_embeds(embeds, "heartbeat")
-if rc == 0 and state_key in ("up", "down"):
+if rc == 0 and state_key in ("up", "frozen", "down"):
     write_state(state_key)
 if lvl >= 0:
     write_file(HEALTH_STATE_FILE, LVLNAME[lvl])   # re-baseline the health edge too
