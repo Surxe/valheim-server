@@ -31,6 +31,7 @@ join (or if you clear the saved entry).
 | FarmGrid | 1.0.0 | Galateam / FarmGrid | ➖ optional |
 | FirstPersonMode | 1.3.12 | Azumatt / FirstPersonMode | ➖ optional |
 | QuickTeleport | 1.1.0 | Muindor / QuickTeleport | ➖ optional (faster portals) |
+| QuietShield | 1.0.0 | idontunderstand / QuietShield | ➖ optional (silences shield hum) |
 | Unshamed | 1.0.5 | Azumatt / Unshamed | ➖ optional (achievements) |
 
 **Install?** ✅ required = you're kicked without it. ➖ optional = client-side preference,
