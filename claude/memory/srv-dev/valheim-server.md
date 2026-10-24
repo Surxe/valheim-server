@@ -60,6 +60,10 @@ dungeon teleports; deps only BepInEx, not in the version check). It can optional
 `Server.ConfigPriority=true` to force one timing on clients that have it — deliberately not done. Load-tested
 under a temporary `plugin` role (`Loading [Quick Teleport 1.1.0]`, clean), then reverted. verify-boot CLEAN.
 Snapshot `pre_qtp_bumps_20261016`.
+**Added 2026-10-23:** **QuietShield 1.0.0 (idontunderstand)** client-side **optional** — reduces/silences the
+shield generator hum (AudioMan/AudioSource patches; deps only BepInEx, per-player config). Load-tested under
+a temporary `plugin` role (`Loading [Quiet Shield 1.0.0]`, clean), then reverted; client-tested OK by Ethan.
+verify-boot CLEAN. Snapshot `pre_quietshield_20261023`.
 **Added 2026-10-12:** **InventoryActions 1.1.14 (sighsorry)** `plugin+required` — the item-favoriting mod
 (Alt+click an inventory slot to favorite it). Replaces ronaldoniz/FavoriteItems.
 **Bumped 2026-10-04:** ModSentry 1.0.19 -> **1.0.20** (BepInEx 5.4.2351 rebuild), DropThat 3.1.5 -> **3.1.6**

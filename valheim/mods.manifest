@@ -183,3 +183,9 @@ BlastFurnaceTakesAll|1.1.0|BlastFurnaceTakesAll.dll|1fa1b33aa6f6d340043cb5fb5385
 # Server.ConfigPriority=true to push one timing to every client that has it - deliberately not done.
 # LOAD-TEST 2026-10-16 on VM 100 (temporary plugin role): Loading [Quick Teleport 1.1.0], zero load errors.
 QuickTeleport|1.1.0|QuickTeleport.dll|8b87679af090018d7196c5a3efe20d3ac945883568cd28560e5d1b937e655889|optional|https://thunderstore.io/package/download/Muindor/QuickTeleport/1.1.0/
+# QuietShield (idontunderstand): reduces or silences the shield generator's constant hum (Harmony
+# patches on AudioMan / AudioSource for sfx_shieldgenerator). Added 2026-10-23, v1.0.0 (initial
+# release). Deps: BepInEx only (no Jotunn/ServerSync). Purely client-side audio, per-player config,
+# so optional. LOAD-TEST 2026-10-23 on VM 100 (temporary plugin role): Loading [Quiet Shield 1.0.0],
+# zero load errors.
+QuietShield|1.0.0|QuietShield.dll|b0c2f194857530c470eddfe7bd42007cda89c1046189be7985499946d5829295|optional|https://thunderstore.io/package/download/idontunderstand/QuietShield/1.0.0/
