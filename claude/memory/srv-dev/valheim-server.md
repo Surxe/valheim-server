@@ -60,6 +60,11 @@ dungeon teleports; deps only BepInEx, not in the version check). It can optional
 `Server.ConfigPriority=true` to force one timing on clients that have it — deliberately not done. Load-tested
 under a temporary `plugin` role (`Loading [Quick Teleport 1.1.0]`, clean), then reverted. verify-boot CLEAN.
 Snapshot `pre_qtp_bumps_20261016`.
+**Added 2026-10-24:** **SkillLossMod 1.0.1 (OLYMPOS)** client-side **required** (not a server plugin) — on death
+you lose only the progress toward the next skill level instead of 5% of the skill (Harmony patch on
+Skills.OnDeath / m_DeathLowerFactor, both still in the 1.0 assembly; Feb 2023 pre-1.0 build, deps only BepInEx).
+`BepInProcess(valheim.exe)` so the server can't load it -> no server load test; needs a client smoke test.
+Staged to ModSentry_Required (hash matches). verify-boot CLEAN. Snapshot `pre_skilllossmod_20261024`.
 **Added 2026-10-23:** **QuietShield 1.0.0 (idontunderstand)** client-side **optional** — reduces/silences the
 shield generator hum (AudioMan/AudioSource patches; deps only BepInEx, per-player config). Load-tested under
 a temporary `plugin` role (`Loading [Quiet Shield 1.0.0]`, clean), then reverted; client-tested OK by Ethan.

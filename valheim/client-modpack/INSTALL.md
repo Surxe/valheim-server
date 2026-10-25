@@ -28,6 +28,7 @@ join (or if you clear the saved entry).
 | HarpoonExtended | 1.2.1 | shudnal / HarpoonExtended | ✅ required |
 | BlastFurnaceTakesAll | 1.1.0 | TastyChickenLegs / BlastFurnaceTakesAll | ✅ required |
 | InventoryActions | 1.1.14 | sighsorry / InventoryActions | ✅ required |
+| SkillLossMod | 1.0.1 | OLYMPOS / SkillLossMod | ✅ required |
 | FarmGrid | 1.0.0 | Galateam / FarmGrid | ➖ optional |
 | FirstPersonMode | 1.3.12 | Azumatt / FirstPersonMode | ➖ optional |
 | QuickTeleport | 1.1.0 | Muindor / QuickTeleport | ➖ optional (faster portals) |
