@@ -140,14 +140,15 @@ threads can't starve the guest agent (agent went unresponsive again during a 202
 restart; bumped 4->6, host has 8. Recover: `qm shutdown --forceStop 1` (graceful ACPI still
 flushes the world save even with the agent down) `/ qm set --cores / qm start`, then the instant
 guest-exec answers on boot, `docker compose stop` to free CPU BEFORE staging, then start).
-**RAM:** alloc is **3.5 GiB fixed** (`memory: 3584`), lowered from 4 GiB on 2026-10-11 (Ethan)
-— the 7.1 GiB host was itself swapping (5.1 GiB used, 1.6 GiB in swap) with the VM holding
-~4 GiB. **3 GiB was tried first (2026-10-10) and was too tight:** within 11h the guest had
-~0.6 GiB in swap (no OOM kills), and the image's updater logged `2.91 GiB is not enough
-memory` every 15 min (its requirements check; cosmetic). 3.5 is the split. At 4 GiB the guest
+**RAM:** alloc is **4 GiB fixed** (`memory: 4096`), raised from 3.5 GiB on 2026-10-25 (Ethan;
+the guest was ~560 MiB into swap at 3.5). History: 4 GiB until 2026-10-11, lowered to 3.5 because
+the 7.1 GiB host was itself swapping (5.1 GiB used, 1.6 GiB in swap) with the VM holding ~4 GiB;
+**3 GiB was tried first (2026-10-10) and was too tight** (~0.6 GiB guest swap within 11h, and the
+image's updater logged `2.91 GiB is not enough memory` every 15 min, cosmetic). At 4 GiB the guest
 used 2.5 GiB of 3.9 with the container alone at ~2.5 GiB, so headroom is still modest.
-If the server hitches or loads slowly, **4096 is the rollback** (never above 4 GiB:
-that risks **host** OOM, which kills the whole VM). A memory change needs a full VM
+Watch host swap/available with `hs-health.sh`; if the host starts swapping hard, **3584 is the
+rollback**. **Never go above 4 GiB:** that risks **host** OOM, which kills the whole VM.
+A memory change needs a full VM
 stop/start: `docker stop -t 120 valheim` -> `qm shutdown` -> `qm set 100 --memory N` ->
 `qm start` -> `docker start valheim` (an explicit stop defeats `restart: unless-stopped`).
 The guest has a **1.5 GiB swapfile** (`/swapfile`, `vm.swappiness=10`) as an OOM cushion so

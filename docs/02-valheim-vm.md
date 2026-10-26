@@ -15,8 +15,8 @@ In Proxmox:
 - Guest: a small **Debian 13** VM (netinst, minimal, no desktop).
 - vCPU/RAM: Valheim is memory-hungry per world; start ~4GB RAM / 2-4 vCPU and
   adjust. An old laptop CPU is fine for a few friends. On this 7.1 GiB host the alloc
-  is **3.5 GiB fixed** (lowered from 4 GiB on 2026-10-11 because the host itself was
-  swapping; 3 GiB was tried first and pushed the guest into swap); cloud-init adds a small **1.5 GiB swapfile** (`vm.swappiness=10`) as an OOM
+  is **4 GiB fixed** (briefly 3.5 GiB from 2026-10-11 because the host itself was swapping,
+  raised back on 2026-10-25 after the guest went into swap; 3 GiB was tried and was too tight); cloud-init adds a small **1.5 GiB swapfile** (`vm.swappiness=10`) as an OOM
   cushion so a transient spike past RAM degrades gracefully instead of killing the server.
 - Disk: ~**32GB** thin-provisioned (8GB game + world + guest OS + Docker images,
   with headroom). Grow later if needed.
