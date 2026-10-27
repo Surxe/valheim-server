@@ -196,3 +196,9 @@ QuietShield|1.0.0|QuietShield.dll|b0c2f194857530c470eddfe7bd42007cda89c1046189be
 # design (death skill loss runs on the dying client), so no plugin role / server load test.
 # Server-wide gameplay rule, so every client must run it -> required.
 SkillLossMod|1.0.1|SkillLossMod.dll|a6c64fde431270f7540d2405d014f102e053dc90b71f46ebfcf6ee1f53debbc1|required|https://thunderstore.io/package/download/OLYMPOS/SkillLossMod/1.0.1/
+# WindRunDisplay (Sur): shows the Asksvin cloak's live Wind run bonus under its status icon (from
+# heading vs. wind), plus max/current in the tooltip; configurable lines/labels/font size. Added
+# 2026-10-26, v1.0.0 (built for Valheim 1.0). Deps: BepInEx only. Purely client-side UI, per-player
+# config, so optional. LOAD-TEST 2026-10-26 on VM 100 (temporary plugin role): Loading [Wind Run
+# Display 1.0.0], zero load errors.
+WindRunDisplay|1.0.0|WindRunDisplay.dll|c526ae9341a2baedcfcfc134b1c5d17dce2fb69a69a1041092053b132792b5cb|optional|https://thunderstore.io/package/download/Sur/WindRunDisplay/1.0.0/

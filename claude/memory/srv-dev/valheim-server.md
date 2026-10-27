@@ -60,6 +60,10 @@ dungeon teleports; deps only BepInEx, not in the version check). It can optional
 `Server.ConfigPriority=true` to force one timing on clients that have it — deliberately not done. Load-tested
 under a temporary `plugin` role (`Loading [Quick Teleport 1.1.0]`, clean), then reverted. verify-boot CLEAN.
 Snapshot `pre_qtp_bumps_20261016`.
+**Added 2026-10-26:** **WindRunDisplay 1.0.0 (Sur)** client-side **optional** — shows the Asksvin cloak's live
+Wind run bonus under its status icon (+ tooltip max/current; deps only BepInEx, per-player config). Load-tested
+under a temporary `plugin` role (`Loading [Wind Run Display 1.0.0]`, clean), then reverted; client-tested OK by
+Ethan. verify-boot CLEAN. Snapshot `pre_windrundisplay_20261026`.
 **Added 2026-10-24:** **SkillLossMod 1.0.1 (OLYMPOS)** client-side **required** (not a server plugin) — on death
 you lose only the progress toward the next skill level instead of 5% of the skill (Harmony patch on
 Skills.OnDeath / m_DeathLowerFactor, both still in the 1.0 assembly; Feb 2023 pre-1.0 build, deps only BepInEx).
