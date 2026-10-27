@@ -33,6 +33,7 @@ join (or if you clear the saved entry).
 | FirstPersonMode | 1.3.12 | Azumatt / FirstPersonMode | ➖ optional |
 | QuickTeleport | 1.1.0 | Muindor / QuickTeleport | ➖ optional (faster portals) |
 | QuietShield | 1.0.0 | idontunderstand / QuietShield | ➖ optional (silences shield hum) |
+| WindRunDisplay | 1.0.0 | Sur / WindRunDisplay | ➖ optional (Asksvin cloak wind run bonus) |
 | Unshamed | 1.0.5 | Azumatt / Unshamed | ➖ optional (achievements) |
 
 **Install?** ✅ required = you're kicked without it. ➖ optional = client-side preference,
