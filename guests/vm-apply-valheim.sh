@@ -6,7 +6,9 @@
 #      into the VM at /srv/valheim/
 #   2. run stage-mods.sh in the VM (verifies DLL hashes, lays plugins + ModSentry policy,
 #      mirrors the runtime plugin cache) — DLLs are downloaded+verified in the VM if absent
-#   3. docker compose restart (BepInEx reloads; the crossplay join code rotates)
+#   3. docker compose up -d --force-recreate (BepInEx reloads; the crossplay join code rotates).
+#      A plain "restart" keeps the container's old env and compose config, so it would miss
+#      compose edits (e.g. STEAMCMD_ARGS).
 #
 # Does NOT manage secrets/values: /etc/valheim/valheim.env is set by hand on the VM.
 set -euo pipefail
@@ -30,5 +32,5 @@ echo "== staging mods in VM =="
 GX_TIMEOUT=180 gx bash -lc "cd /srv/valheim && ./stage-mods.sh"
 
 echo "== restarting container =="
-GX_TIMEOUT=120 gx bash -lc "cd /srv/valheim && docker compose restart"
+GX_TIMEOUT=200 gx bash -lc "cd /srv/valheim && timeout 180 docker compose up -d --force-recreate"
 echo "done. verify once world-load settles (~1 min): sudo $(dirname "$0")/../valheim/verify-boot.sh --wait 60"
