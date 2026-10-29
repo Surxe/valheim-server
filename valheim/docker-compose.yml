@@ -28,7 +28,10 @@ services:
       # -crossplay is MANDATORY for the mod policy (docs/02). Steam login is anonymous
       # (app 896660) so no account/purchase is needed to run the dedicated server.
       SERVER_ARGS: "-crossplay"
-      STEAMCMD_ARGS: "validate"
+      # No "validate": the image's default re-hashes the whole 2.2 GB install on every
+      # 15-min idle update check, churning the guest page cache and pushing the idle
+      # server's memory into swap. Plain app_update still fetches real game updates.
+      STEAMCMD_ARGS: ""
       TZ: "America/Chicago"
     # Ports are NOT required for crossplay (outbound PlayFab relay); mapped only for
     # optional same-LAN Steam joins. Safe to remove.
