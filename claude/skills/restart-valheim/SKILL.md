@@ -39,12 +39,16 @@ sudo qm guest exec 100 --timeout 75 -- /bin/bash -lc 'timeout 60 docker exec val
 ## Container restart
 
 ```
-sudo qm guest exec 100 --timeout 200 -- /bin/bash -lc 'timeout 180 docker restart valheim; echo rc=$?'
+sudo qm guest exec 100 --timeout 200 -- /bin/bash -lc 'cd /srv/valheim && timeout 180 docker compose up -d --force-recreate; echo rc=$?'
 ```
 
-`docker restart` can take longer than its timeout to return while the old container is
-torn down; check `docker ps` before retrying. Don't fire it twice. A second restart only
-restarts the update download.
+Use `docker compose up -d --force-recreate`, not `docker restart`: a plain restart keeps the
+container's old env and compose config, so a `docker-compose.yml` / env change would not
+take effect.
+
+It can take longer than the timeout to return while the old container is torn down; check
+`docker ps` before retrying. Don't fire it twice. A second recreate only restarts the update
+download.
 
 ## Confirm it's back
 
