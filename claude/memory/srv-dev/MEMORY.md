@@ -6,7 +6,7 @@ Installed from `valheim-server/claude/memory/srv-dev/` (a sibling clone at
 VM 100; edit them there and run that repo's `install.sh`. One line per memory.
 
 - [Valheim config lives in valheim-server](valheim-config-lives-in-valheim-server.md) — Valheim config/units/skills/memory live in the valheim-server repo (sibling clone), not home-server; edit there + run its install.sh
-- [Valheim server](valheim-server.md) — modded Valheim dedicated server (VM 100); drive via `qm guest exec`; on 1.0 with a reduced mod set
+- [Valheim server](valheim-server.md) — RETIRED 2026-11-07 (VM 100 stopped, timers off via repo `RETIRED`); final backups + how to revive; history of the modded 1.0 server
 - [DropThat prefab dump](dropthat-prefab-dump.md) — how to dump prefab/drop-table ids safely (enable → generate → STOP, or it hogs the VM)
 - [Mod update: halt before docs](mod-update-halt-before-docs.md) — adding/updating mods: after server is up + verified, stop for Ethan's OK before docs or client mod docs
 - [Valheim mod inventory](valheim-mod-inventory.md) — list installed mods (required/optional + version): `valheim/list-installed-mods.sh`; the 4 Discord feeds incl. `hs-mod-announce` (agent-triggered mod-change diff via the announce-valheim-mods skill)
