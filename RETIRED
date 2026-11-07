@@ -1,0 +1,22 @@
+Valheim server retired 2026-11-07 -- the world was beaten.
+
+While this file exists, systemd/install.sh disables (and stops) every Valheim timer
+instead of enabling them, so a whole-box install never revives the Discord feeds,
+mod checks, or daily vzdump.
+
+Final state preserved:
+- Proxmox snapshot: VM 100 @ final_beat_valheim_20261107, the only one kept
+  (container stopped cleanly, world save 2807).
+- World tarball: /srv/valheim/config/final-snapshot/valheim-final-world-20261107.tar.zst
+  inside the VM, copied to /mnt/backup/valheim-final/ on the host (+ .sha256).
+- Final vzdump (whole guest, taken after the snapshot), moved out of the pruned
+  vzdump/ dir: /mnt/backup/valheim-final/vzdump-qemu-100-2026_11_07-11_25_27.vma.zst
+  (+ .log, .sha256). Restore: qmrestore <that file> 100
+- Final restic B2 world backup: snapshot 84dcc536 (tags "world,final"; rewritten from
+  b1710bea when the hourly backups/*.zip were excluded from every B2 snapshot).
+
+VM 100 is shut down with onboot=0.
+
+To bring it back: delete this file, `qm set 100 --onboot 1 && qm start 100`, then
+`docker start valheim` in the guest, and re-run ./install.sh (re-enables the timers;
+hs-vzdump-valheim.timer must still be enabled by hand, as before).

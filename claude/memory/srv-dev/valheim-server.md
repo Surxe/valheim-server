@@ -1,9 +1,29 @@
 ---
 name: valheim-server
-description: The modded Valheim dedicated server — where it runs, how to drive it, current state
+description: The modded Valheim dedicated server (VM 100) — RETIRED 2026-11-07 (world beaten); final backups, how to revive, and its history
 metadata:
   type: project
 ---
+
+**RETIRED 2026-11-07 — Ethan's group beat the game.** VM 100 is shut down with `onboot=0`;
+every Valheim host timer is off. The `RETIRED` file at the valheim-server repo root is the
+switch: while it exists `systemd/install.sh` disables (not enables) all the timers, so a
+whole-box install never revives the feeds/dumps. `hs-health.sh` reports a stopped
+`onboot=0` VM as "parked" (info), not WARN. Final state (container stopped cleanly first,
+world save 2807):
+- Proxmox snapshot `final_beat_valheim_20261107` (the only one kept).
+- Host stick `/mnt/backup/valheim-final/`: full vzdump
+  `vzdump-qemu-100-2026_11_07-11_25_27.vma.zst` (22.3 GiB) + the world tarball
+  `valheim-final-world-20261107.tar.zst` (146 MiB), each with a `.sha256`. Older vzdumps deleted.
+- B2 (restic, world only): final snapshot `84dcc536` (tags `world,final`). The hourly
+  `backups/*.zip` were rewritten out of every snapshot -> repo ~328 MiB. B2 creds live only
+  inside the VM (`/etc/home-server/backup.env` there), so B2 ops need a VM boot.
+- Revive: delete `RETIRED`, `qm set 100 --onboot 1 && qm start 100`, `docker start valheim`
+  in the guest, re-run `install.sh` (vzdump timer still enabled by hand); or
+  `qmrestore <final vzdump> 100`. Gotcha seen: the scheduled B2 run hung for hours in
+  `restic forget --prune` (futex wait, no sockets) — SIGTERM it, it's safe to interrupt.
+
+Everything below is the history from when the server was live.
 
 Modded Valheim dedicated server "**BaldurianQuat**", hosted on this box in **Proxmox VM 100**
 as a Docker container (`lloesche/valheim-server`, container name `valheim`). Crossplay-only

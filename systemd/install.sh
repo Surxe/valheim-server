@@ -58,8 +58,26 @@ else
   echo "  ok: mod-announce baseline present ($ANNOUNCE_STATE)"
 fi
 
-say "reload + enable timers"
 systemctl daemon-reload
+
+# Retired switch: a RETIRED file at the repo root means the server is shut down for good
+# (VM 100 stopped, onboot off). Every Valheim timer -- backup one included -- is disabled
+# and stopped instead of enabled, so a whole-box install never revives the feeds/dumps.
+# NB: `disable` on a symlinked (linked) unit also removes its link, so the timers drop out
+# of /etc/systemd/system; the .services stay linked so any job can still be run by hand.
+# Delete RETIRED and re-run this installer to bring it all back (it re-links the timers).
+if [ -f "$REPO/RETIRED" ]; then
+  say "RETIRED: disabling all Valheim timers (see $REPO/RETIRED)"
+  for t in "${TIMERS[@]}" hs-vzdump-valheim.timer; do
+    systemctl disable --now "$t" >/dev/null 2>&1 || true
+    systemctl reset-failed "$t" >/dev/null 2>&1 || true   # unlinked-while-loaded shows "failed"
+    if systemctl is-active --quiet "$t"; then echo "  !! $t still active"; else echo "  off: $t"; fi
+  done
+  echo "systemd units installed (retired: timers off)."
+  exit 0
+fi
+
+say "enable timers"
 for t in "${TIMERS[@]}"; do
   systemctl enable --now "$t" && echo "  enabled --now $t"
 done
